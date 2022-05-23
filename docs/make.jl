@@ -6,11 +6,11 @@ DocMeta.setdocmeta!(ESG, :DocTestSetup, :(using ESG); recursive=true)
 makedocs(;
     modules=[ESG],
     authors="Alec Loudenback <alecloudenback@gmail.com> and contributors",
-    repo="https://github.com/alecloudenback/ESG.jl/blob/{commit}{path}#{line}",
+    repo="https://github.com/JuliaActuary/ESG.jl/blob/{commit}{path}#{line}",
     sitename="ESG.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://alecloudenback.github.io/ESG.jl",
+        canonical="https://JuliaActuary.github.io/ESG.jl",
         assets=String[],
     ),
     pages=[
@@ -19,6 +19,6 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/alecloudenback/ESG.jl",
+    repo="github.com/JuliaActuary/ESG.jl",
     devbranch="main",
 )

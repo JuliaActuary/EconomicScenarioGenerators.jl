@@ -4,7 +4,7 @@ CurrentModule = ESG
 
 # ESG
 
-Documentation for [ESG](https://github.com/alecloudenback/ESG.jl).
+Documentation for [ESG](https://github.com/JuliaActuary/ESG.jl).
 
 ```@index
 ```
