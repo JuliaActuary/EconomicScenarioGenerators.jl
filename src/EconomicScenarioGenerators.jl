@@ -57,6 +57,10 @@ struct HullWhite{T} <: ShortRateModel
 end
 # See Yields.jl for HullWhite with a YieldCurve defining theta
 
+# this is when \theta is a function
+function nextrate(M::HullWhite,prior,time,timestep) where {T}
+    prior + (M.θ(time)+ M.a * prior) * timestep + M.σ * randn()
+end
 
 
 """
