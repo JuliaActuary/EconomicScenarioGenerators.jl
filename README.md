@@ -14,12 +14,11 @@ Interested in developing economic scenario generators in Julia? Consider contrib
 ## Examples
 
 ```julia
-m = Vasicek(0.136,0.0168,0.0119)
+m = Vasicek(0.136,0.0168,0.0119,0.01) # a, b, σ, initial rate
 s = ScenarioGenerator(
         1,                              # timestep
         10,                             # projection horizon
-        EconomicScenarioGenerators.Vasicek(0.136,.0168,.0119), # EconomicScenarioGenerators model
-        0.01                            # starting rate
+        m
     )
 ```
 
