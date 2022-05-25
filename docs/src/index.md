@@ -1,14 +1,14 @@
 ```@meta
-CurrentModule = ESG
+CurrentModule = EconomicScenarioGenerators
 ```
 
-# ESG
+# EconomicScenarioGenerators
 
-Documentation for [ESG](https://github.com/JuliaActuary/ESG.jl).
+Documentation for [EconomicScenarioGenerators](https://github.com/JuliaActuary/EconomicScenarioGenerators.jl).
 
 ```@index
 ```
 
 ```@autodocs
-Modules = [ESG]
+Modules = [EconomicScenarioGenerators]
 ```

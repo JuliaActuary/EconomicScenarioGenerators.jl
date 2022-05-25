@@ -1,26 +1,24 @@
-using ESG
+using EconomicScenarioGenerators
 using Test
 using Yields
 
-@testset "ESG.jl" begin
-    m = ESG.Vasicek(0.136,0.0168,0.0119)
-    s = ESG.ScenarioGenerator(
+@testset "EconomicScenarioGenerators.jl" begin
+    m = Vasicek(0.136,0.0168,0.0119,0.01)
+    s = ScenarioGenerator(
                1.,                              # timestep
                30.,                             # projection horizon
-               ESG.Vasicek(0.136,.0168,.0119), # ESG model
-               0.01                            # starting rate
+               Vasicek(0.136,.0168,.0119, 0.01), # EconomicScenarioGenerators model
            )
 
-    @test length(s) == 30
+    @test length(s) == 31
 
-    s = ESG.ScenarioGenerator(
+    s = EconomicScenarioGenerators.ScenarioGenerator(
         0.5,                              # timestep
         30.,                             # projection horizon
-        ESG.Vasicek(0.136,.0168,.0119), # ESG model
-        0.01                            # starting rate
+        EconomicScenarioGenerators.Vasicek(0.136,.0168,.0119, 0.01) # EconomicScenarioGenerators model
     )
 
-    @test length(s) == 60
+    @test length(s) == 61
 
     @test yieldcurve(s) isa Yields.YieldCurve
 

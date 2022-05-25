@@ -54,6 +54,6 @@ jobs:
       - run: |
           julia --project=docs -e '
             using Documenter: DocMeta, doctest
-            using ESG
-            DocMeta.setdocmeta!(ESG, :DocTestSetup, :(using ESG); recursive=true)
-            doctest(ESG)'
+            using EconomicScenarioGenerators
+            DocMeta.setdocmeta!(EconomicScenarioGenerators, :DocTestSetup, :(using EconomicScenarioGenerators); recursive=true)
+            doctest(EconomicScenarioGenerators)'

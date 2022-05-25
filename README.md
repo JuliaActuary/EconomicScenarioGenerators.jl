@@ -1,9 +1,9 @@
-# ESG.jl
+# EconomicScenarioGenerators.jl
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaActuary.github.io/ESG.jl/stable)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaActuary.github.io/ESG.jl/dev)
-[![Build Status](https://github.com/JuliaActuary/ESG.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/JuliaActuary/ESG.jl/actions/workflows/CI.yml?query=branch%3Amain)
-[![Coverage](https://codecov.io/gh/JuliaActuary/ESG.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaActuary/ESG.jl)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaActuary.github.io/EconomicScenarioGenerators.jl/stable)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaActuary.github.io/EconomicScenarioGenerators.jl/dev)
+[![Build Status](https://github.com/JuliaActuary/EconomicScenarioGenerators.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/JuliaActuary/EconomicScenarioGenerators.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Coverage](https://codecov.io/gh/JuliaActuary/EconomicScenarioGenerators.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaActuary/EconomicScenarioGenerators.jl)
 
 Help wanted!
 
@@ -18,7 +18,7 @@ m = Vasicek(0.136,0.0168,0.0119)
 s = ScenarioGenerator(
         1,                              # timestep
         10,                             # projection horizon
-        ESG.Vasicek(0.136,.0168,.0119), # ESG model
+        EconomicScenarioGenerators.Vasicek(0.136,.0168,.0119), # EconomicScenarioGenerators model
         0.01                            # starting rate
     )
 ```

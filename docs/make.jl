@@ -1,16 +1,16 @@
-using ESG
+using EconomicScenarioGenerators
 using Documenter
 
-DocMeta.setdocmeta!(ESG, :DocTestSetup, :(using ESG); recursive=true)
+DocMeta.setdocmeta!(EconomicScenarioGenerators, :DocTestSetup, :(using EconomicScenarioGenerators); recursive=true)
 
 makedocs(;
-    modules=[ESG],
+    modules=[EconomicScenarioGenerators],
     authors="Alec Loudenback <alecloudenback@gmail.com> and contributors",
-    repo="https://github.com/JuliaActuary/ESG.jl/blob/{commit}{path}#{line}",
-    sitename="ESG.jl",
+    repo="https://github.com/JuliaActuary/EconomicScenarioGenerators.jl/blob/{commit}{path}#{line}",
+    sitename="EconomicScenarioGenerators.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://JuliaActuary.github.io/ESG.jl",
+        canonical="https://JuliaActuary.github.io/EconomicScenarioGenerators.jl",
         assets=String[],
     ),
     pages=[
@@ -19,6 +19,6 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/JuliaActuary/ESG.jl",
+    repo="github.com/JuliaActuary/EconomicScenarioGenerators.jl",
     devbranch="main",
 )

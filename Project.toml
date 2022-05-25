@@ -1,4 +1,4 @@
-name = "ESG"
+name = "EconomicScenarioGenerators"
 uuid = "1d18cbdc-9ca7-45fd-a8b2-b9434f9145be"
 authors = ["Alec Loudenback <alecloudenback@gmail.com> and contributors"]
 version = "0.1.0"
@@ -9,8 +9,8 @@ Requires = "ae029012-a4dd-5104-9daa-d747884805df"
 
 [compat]
 LabelledArrays = "^1"
-julia = "1.6"
 Requires = "^1"
+julia = "1.6"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
