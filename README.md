@@ -7,7 +7,7 @@
 
 Help wanted!
 
-This package is very early in its development cycle.
+This package is very early in its development cycle. It may not work if you try to run it at this point.
 
 Interested in developing economic scenario generators in Julia? Consider contributing to this package. Open an issue, create a pull request, or discuss on the Julia Zulip's #actuary channel.
 
