@@ -25,7 +25,10 @@ end
 """
 outputtype defines what the iterator's type output is for each element
 """
-outputtype(::Type{Vasicek}) = Float64
+outputtype(M::Vasicek) = Float64
+function __initial_short_rate(M::Vasicek,timestep)
+    M.initial
+end
 
 """
 Via Wikipedia: https://en.wikipedia.org/wiki/Cox%E2%80%93Ingersoll%E2%80%93Ross_model
@@ -44,7 +47,10 @@ end
 """
 outputtype defines what the iterator's type output is for each element
 """
-outputtype(::Type{CoxIngersollRoss}) = Float64
+outputtype(M::CoxIngersollRoss) = Float64
+function __initial_short_rate(M::CoxIngersollRoss,timestep)
+    M.initial
+end
 
 """
 Via Wikipedia: https://en.wikipedia.org/wiki/Hull%E2%80%93White_model
@@ -53,12 +59,12 @@ struct HullWhite{T} <: ShortRateModel
     a::Float64 # 0.136
     b::Float64 # .0168
     σ::Float64 # .0119
-    Θ::T
+    θ::T
 end
 # See Yields.jl for HullWhite with a YieldCurve defining theta
 
 # this is when \theta is a function
-function nextrate(M::HullWhite,prior,time,timestep) where {T}
+function nextrate(M::HullWhite{T},prior,time,timestep) where {T}
     prior + (M.θ(time)+ M.a * prior) * timestep + M.σ * randn()
 end
 
@@ -66,8 +72,11 @@ end
 """
 outputtype defines what the iterator's type output is for each element
 """
-outputtype(::Type{HullWhite}) = Float64
+outputtype(::Type{HullWhite{T}}) where {T} = Yields.__ratetype(T)
 
+function __initial_short_rate(M::HullWhite{T},timestep) where {T}
+    Yields.forward(M.θ,0,timestep)
+end
 
 
 struct ScenarioGenerator{N<:Real,T}
@@ -79,9 +88,10 @@ end
 function Base.length(sg::ScenarioGenerator{N,T}) where {N,T<:InterestRateModel}
     return length(0:sg.timestep:sg.endtime) 
 end
-function Base.iterate(sg::ScenarioGenerator{N,T}) where {N,T<:InterestRateModel}
 
-    state = @LArray [0,sg.model.initial] (:time,:rate)
+function Base.iterate(sg::ScenarioGenerator{N,T}) where {N,T<:InterestRateModel}
+    initial = __initial_short_rate(sg.model,sg.timestep)
+    state = @LArray [0,initial] (:time,:rate)
     return (state.rate,state) # TODO: Implement intitial conditions for models
 end
 

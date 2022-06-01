@@ -6,6 +6,6 @@ end
 
 
 function nextrate(M::HullWhite,prior,time,timestep) where {T<:Yields.YieldCurve}
-    θ_t = forward(M.Θ,time,time+timestep)
-    prior + (θ_t+ M.a * prior) * timestep + M.σ * randn()
+    θ_t = Yields.forward(M.θ,time,time+timestep)
+    prior + (θ_t - M.a * prior) * timestep + M.σ * randn()
 end
