@@ -1,5 +1,7 @@
 module EconomicScenarioGenerators
 
+import ForwardDiff
+
 using LabelledArrays
 using Requires
 
@@ -57,16 +59,15 @@ Via Wikipedia: https://en.wikipedia.org/wiki/Hull%E2%80%93White_model
 """
 struct HullWhite{T} <: ShortRateModel
     a::Float64 # 0.136
-    b::Float64 # .0168
-    σ::Float64 # .0119
-    θ::T
+    σ::Float64 # .0168
+    curve::T
 end
 # See Yields.jl for HullWhite with a YieldCurve defining theta
 
-# this is when \theta is a function
-function nextrate(M::HullWhite{T},prior,time,timestep) where {T}
-    prior + (M.θ(time)+ M.a * prior) * timestep + M.σ * randn()
-end
+# how would HullWhite be constructed if not giving it a curve?
+# function nextrate(M::HullWhite{T},prior,time,timestep) where {T}
+#     prior + (M.θ(time) - M.a * prior) * timestep + M.σ * randn()
+# end
 
 
 """
@@ -75,7 +76,7 @@ outputtype defines what the iterator's type output is for each element
 outputtype(::Type{HullWhite{T}}) where {T} = Yields.__ratetype(T)
 
 function __initial_short_rate(M::HullWhite{T},timestep) where {T}
-    Yields.forward(M.θ,0,timestep)
+    Yields.forward(M.curve,0,timestep)
 end
 
 
