@@ -31,7 +31,7 @@ using Yields
         mats = [1/12, 2/12, 3/12, 6/12, 1, 2, 3, 5, 7, 10, 20, 30]
         c = Yields.CMT(rates,mats)
 
-        m = HullWhite(0.136,0.0168,0.0119,c)
+        m = HullWhite(.1,.005,c)
 
         s = ScenarioGenerator(
             1.,                              # timestep
