@@ -5,80 +5,20 @@ import ForwardDiff
 using LabelledArrays
 using Requires
 
-abstract type InterestRateModel end
+abstract type EconomicModel end
 
-abstract type ShortRateModel <: InterestRateModel end
-
-
-"""
-Via Wikipedia: https://en.wikipedia.org/wiki/Vasicek_model
-"""
-struct Vasicek <: ShortRateModel
-    a::Float64 # 0.136
-    b::Float64 # .0168
-    σ::Float64 # .0119
-    initial::Float64 # 0.01
+function initial_value(m::T) where {T<:AbstractEconomicModel}
+    m.initial
 end
 
-function nextrate(M::Vasicek,prior,time,timestep) 
-    prior + M.a * (M.b - prior) * timestep + M.σ * sqrt(timestep) * randn()
+# This is the version that gets called by the iterator as some models depend
+# on the presented timestep and for those specific methods can be written
+function initial_value(m::T,timestep) where {T<:AbstractEconomicModel}
+    initial_value(m)
 end
 
-"""
-outputtype defines what the iterator's type output is for each element
-"""
-outputtype(M::Vasicek) = Float64
-function __initial_short_rate(M::Vasicek,timestep)
-    M.initial
-end
-
-"""
-Via Wikipedia: https://en.wikipedia.org/wiki/Cox%E2%80%93Ingersoll%E2%80%93Ross_model
-"""
-struct CoxIngersollRoss <: ShortRateModel
-    a::Float64 # 0.136
-    b::Float64 # .0168
-    σ::Float64 # .0119
-    initial::Float64 # 0.01
-end
-
-function nextrate(M::CoxIngersollRoss,prior,time,timestep) 
-    prior + M.a * (M.b - prior) * timestep + M.σ * sqrt(prior) * randn()
-end
-
-"""
-outputtype defines what the iterator's type output is for each element
-"""
-outputtype(M::CoxIngersollRoss) = Float64
-function __initial_short_rate(M::CoxIngersollRoss,timestep)
-    M.initial
-end
-
-"""
-Via Wikipedia: https://en.wikipedia.org/wiki/Hull%E2%80%93White_model
-"""
-struct HullWhite{T} <: ShortRateModel
-    a::Float64 # 0.136
-    σ::Float64 # .0168
-    curve::T
-end
-# See Yields.jl for HullWhite with a YieldCurve defining theta
-
-# how would HullWhite be constructed if not giving it a curve?
-# function nextrate(M::HullWhite{T},prior,time,timestep) where {T}
-#     prior + (M.θ(time) - M.a * prior) * timestep + M.σ * randn()
-# end
-
-
-"""
-outputtype defines what the iterator's type output is for each element
-"""
-outputtype(::Type{HullWhite{T}}) where {T} = Yields.__ratetype(T)
-
-function __initial_short_rate(M::HullWhite{T},timestep) where {T}
-    Yields.forward(M.curve,0,timestep)
-end
-
+include("interest.jl")
+include("equity.jl")
 
 struct ScenarioGenerator{N<:Real,T}
     timestep::N
@@ -86,17 +26,17 @@ struct ScenarioGenerator{N<:Real,T}
     model::T
 end
 
-function Base.length(sg::ScenarioGenerator{N,T}) where {N,T<:InterestRateModel}
+function Base.length(sg::ScenarioGenerator{N,T}) where {N,T<:AbstractEconomicModel}
     return length(0:sg.timestep:sg.endtime) 
 end
 
-function Base.iterate(sg::ScenarioGenerator{N,T}) where {N,T<:InterestRateModel}
-    initial = __initial_short_rate(sg.model,sg.timestep)
+function Base.iterate(sg::ScenarioGenerator{N,T}) where {N,T<:AbstractEconomicModel}
+    initial = initial_value(sg.model,sg.timestep)
     state = @LArray [0,initial] (:time,:rate)
     return (state.rate,state) # TODO: Implement intitial conditions for models
 end
 
-function Base.iterate(sg::ScenarioGenerator{N,T},state) where {N,T<:InterestRateModel}
+function Base.iterate(sg::ScenarioGenerator{N,T},state) where {N,T<:AbstractEconomicModel}
     if state.time >= sg.endtime
         return nothing
     else
@@ -109,21 +49,13 @@ end
 
 Base.eltype(::Type{ScenarioGenerator{N,T}}) where {N,T} = outputtype(T)
 
-#iteration example
-struct Squares
-    count::Int
-end
-
-Base.iterate(S::Squares, state=1) = state > S.count ? nothing : (state*state, state+1)
-Base.eltype(::Type{Squares}) = Int 
-Base.length(S::Squares) = S.count
-
 
 function __init__()
     @require Yields="d7e99b2f-e7f3-4d9e-9f01-2338fc023ad3" include("Yields.jl")
 end
 
 export Vasicek, CoxIngersollRoss, HullWhite,
+        BlackScholesMerton,ConstantElasticityofVariance,
         ScenarioGenerator, yieldcurve
 
 end
