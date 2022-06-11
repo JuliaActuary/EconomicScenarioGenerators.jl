@@ -7,13 +7,13 @@ using LabelledArrays
 
 abstract type EconomicModel end
 
-function initial_value(m::T) where {T<:AbstractEconomicModel}
+function initial_value(m::T) where {T<:EconomicModel}
     m.initial
 end
 
 # This is the version that gets called by the iterator as some models depend
 # on the presented timestep and for those specific methods can be written
-function initial_value(m::T,timestep) where {T<:AbstractEconomicModel}
+function initial_value(m::T,timestep) where {T<:EconomicModel}
     initial_value(m)
 end
 
@@ -26,17 +26,17 @@ struct ScenarioGenerator{N<:Real,T}
     model::T
 end
 
-function Base.length(sg::ScenarioGenerator{N,T}) where {N,T<:AbstractEconomicModel}
+function Base.length(sg::ScenarioGenerator{N,T}) where {N,T<:EconomicModel}
     return length(0:sg.timestep:sg.endtime) 
 end
 
-function Base.iterate(sg::ScenarioGenerator{N,T}) where {N,T<:AbstractEconomicModel}
+function Base.iterate(sg::ScenarioGenerator{N,T}) where {N,T<:EconomicModel}
     initial = initial_value(sg.model,sg.timestep)
     state = @LArray [0,initial] (:time,:rate)
     return (state.rate,state) # TODO: Implement intitial conditions for models
 end
 
-function Base.iterate(sg::ScenarioGenerator{N,T},state) where {N,T<:AbstractEconomicModel}
+function Base.iterate(sg::ScenarioGenerator{N,T},state) where {N,T<:EconomicModel}
     if state.time >= sg.endtime
         return nothing
     else
@@ -50,8 +50,10 @@ end
 Base.eltype(::Type{ScenarioGenerator{N,T}}) where {N,T} = outputtype(T)
 
 
-function __init__()
-    @require Yields="d7e99b2f-e7f3-4d9e-9f01-2338fc023ad3" include("Yields.jl")
+function yieldcurve(sg::ScenarioGenerator{N,T}) where {N,T<:InterestRateModel}
+    times = sg.timestep:sg.timestep:(sg.endtime+sg.timestep)
+
+    Yields.Forward(sg,times)
 end
 
 export Vasicek, CoxIngersollRoss, HullWhite,

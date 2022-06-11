@@ -6,40 +6,35 @@ abstract type ShortRateModel <: InterestRateModel end
 """
 Via Wikipedia: https://en.wikipedia.org/wiki/Vasicek_model
 """
-struct Vasicek <: ShortRateModel
+struct Vasicek{T<:Yields.Rate} <: ShortRateModel
     a::Float64 # 0.136
     b::Float64 # .0168
     σ::Float64 # .0119
-    initial::Float64 # 0.01
+    initial::T # 0.01
 end
 
-function nextrate(M::Vasicek,prior,time,timestep) 
+function nextrate(M::Vasicek{T},prior,time,timestep) where T
     prior + M.a * (M.b - prior) * timestep + M.σ * sqrt(timestep) * randn()
 end
 
 """
 outputtype defines what the iterator's type output is for each element
 """
-outputtype(::Type{Vasicek}) = Float64
+outputtype(::Type{T}) where {T<:ShortRateModel} = Yields.Rate{Float64, Continuous}
 
 """
 Via Wikipedia: https://en.wikipedia.org/wiki/Cox%E2%80%93Ingersoll%E2%80%93Ross_model
 """
-struct CoxIngersollRoss <: ShortRateModel
+struct CoxIngersollRoss{T<:Yields.Rate} <: ShortRateModel
     a::Float64 # 0.136
     b::Float64 # .0168
     σ::Float64 # .0119
-    initial::Float64 # 0.01
+    initial::T # 0.01
 end
 
-function nextrate(M::CoxIngersollRoss,prior,time,timestep) 
-    prior + M.a * (M.b - prior) * timestep + M.σ * sqrt(prior) * randn()
+function nextrate(M::CoxIngersollRoss{T},prior,time,timestep) where {T}
+    prior + M.a * (M.b - prior) * timestep + M.σ * sqrt(Yields.rate(prior)) * randn()
 end
-
-"""
-outputtype defines what the iterator's type output is for each element
-"""
-outputtype(::Type{CoxIngersollRoss}) = Float64
 
 """
 Via Wikipedia: https://en.wikipedia.org/wiki/Hull%E2%80%93White_model
@@ -88,11 +83,4 @@ outputtype(::Type{HullWhite{T}}) where {T} = Yields.__ratetype(T)
 
 function initial_value(M::HullWhite{T},timestep) where {T}
     Yields.forward(M.curve,0,timestep)
-end
-
-
-function yieldcurve(sg::ScenarioGenerator{N,T}) where {N,T<:InterestRateModel}
-    times = sg.timestep:sg.timestep:(sg.endtime+sg.timestep)
-
-    Yields.Forward(sg,times)
 end
