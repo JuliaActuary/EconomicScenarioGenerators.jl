@@ -1,9 +1,9 @@
 module EconomicScenarioGenerators
 
 import ForwardDiff
+import Yields
 
 using LabelledArrays
-using Requires
 
 abstract type EconomicModel end
 
