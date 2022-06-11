@@ -15,18 +15,31 @@ Interested in developing economic scenario generators in Julia? Consider contrib
 
 This package is in a pre-release stage and is not well tested and the API may change.
 
-Steps to use:
-
-1. Checkout and `dev` the [experimental Yields.jl branch](https://github.com/JuliaActuary/Yields.jl/pull/102)
-2. `dev` EconomicScenarioGenerators.jl and checkout the `main` branch
+EconoicScenarioGenerators.jl is now available via the General Registry. Install and use in the normal way:
+1. Add EconomicScenarioGenerators via Pkg
+2. `import EconomicScenarioGenerators` or `using EconomicScenarioGenerators` in your code
 
 ## Examples
 
+### Importing packages
+
+First, import both `EconomicScenarioGenerators` and [`Yields`](https://github.com/JuliaActuary/Yields.jl):
+
+```
+using EconomicScenarioGenerators
+using Yields
+```
+
+
+### Interest Rate Models
+
+#### Vasicek
+
 ```julia
-m = Vasicek(0.136,0.0168,0.0119,0.01) # a, b, σ, initial rate
+m = Vasicek(0.136,0.0168,0.0119,Continuous(0.01)) # a, b, σ, initial Rate
 s = ScenarioGenerator(
         1,  # timestep
-        10, # projection horizon
+        30, # projection horizon
         m,  # model
     )
 ```
@@ -48,17 +61,15 @@ end
 And the package integrates with [Yields.jl](https://github.com/JuliaActuary/Yields.jl) if loaded:
 
 ```julia
-using Yields
-
-yieldcurve(s)
+Yields.Forward(s)
 
 ```
 
-will produce:
+will produce a yield curve object:
 
 ```
 
-               ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Yield Curve (Yields.YieldCurve)⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀           
+               ⠀⠀⠀⠀⠀⠀⠀⠀⠀Yield Curve (Yields.BootstrappedYieldCurve)⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀           
                ┌────────────────────────────────────────────────────────────┐           
           0.02 │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ Zero rates
                │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│           
@@ -80,7 +91,15 @@ will produce:
 
 ```
 
-### Hull White Model using a Yields.jl YieldCurve
+#### CoxIngersolRoss
+
+A CIR model:
+
+```julia
+m = CoxIngersollRoss(0.136,0.0168,0.0119,Continuous(0.01))
+```
+
+#### Hull White Model using a Yields.jl YieldCurve
 
 Construct a yield curve and use that as the arbitrage-free forward curve within the Hull-White model.
 
@@ -124,3 +143,39 @@ p
 ```
 
 ![image](https://user-images.githubusercontent.com/711879/171550813-e3a57557-c7f8-4080-a6c7-88691d5c1be6.png)
+
+### Equity Models
+
+#### BlackScholesMerton
+
+```julia
+m = BlackScholesMerton(0.01,0.02,.15,100.)
+
+s = ScenarioGenerator(
+               1,  # timestep
+               30, # projection horizon
+               m,  # model
+           )
+```
+
+Instantiate an array of the projection with `collect(s)`.
+
+
+##### Plotted BSM Example
+
+Plot 100 paths:
+
+```
+using Plots
+projections = [collect(s) for _ in 1:100]
+
+p = plot()
+
+for p in projections
+    plot!(p,label="")
+end
+
+p
+```
+
+![BSM Paths](https://user-images.githubusercontent.com/711879/173205216-57983889-e0aa-427b-977b-0a586429a74c.png)

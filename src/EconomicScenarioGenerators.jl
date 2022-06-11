@@ -50,14 +50,8 @@ end
 Base.eltype(::Type{ScenarioGenerator{N,T}}) where {N,T} = outputtype(T)
 
 
-function yieldcurve(sg::ScenarioGenerator{N,T}) where {N,T<:InterestRateModel}
-    times = sg.timestep:sg.timestep:(sg.endtime+sg.timestep)
-
-    Yields.Forward(sg,times)
-end
-
 export Vasicek, CoxIngersollRoss, HullWhite,
         BlackScholesMerton,ConstantElasticityofVariance,
-        ScenarioGenerator, yieldcurve
+        ScenarioGenerator
 
 end

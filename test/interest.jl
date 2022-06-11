@@ -19,7 +19,7 @@
 
         @test length(s) == 61
 
-        @test yieldcurve(s) isa Yields.AbstractYield
+        @test Yields.Forward(s) isa Yields.AbstractYield
     end
 
     @testset "CoxIngersollRoss" begin
@@ -40,7 +40,7 @@
 
         @test length(s) == 61
 
-        @test yieldcurve(s) isa Yields.AbstractYield
+        @test Yields.Forward(s) isa Yields.AbstractYield
     end
     
     @testset "Hull White" begin
@@ -68,7 +68,7 @@
 
             @test length(s) == 61
 
-            @test yieldcurve(s) isa Yields.AbstractYield
+            @test Yields.Forward(s) isa Yields.AbstractYield
         end
 
         @testset "with Rate" begin
@@ -90,7 +90,7 @@
 
             @test length(s) == 61
 
-            @test yieldcurve(s) isa Yields.AbstractYield
+            @test Yields.Forward(s) isa Yields.AbstractYieldCurve
 
         end
     end

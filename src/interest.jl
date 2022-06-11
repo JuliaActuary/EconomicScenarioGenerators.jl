@@ -4,6 +4,9 @@ abstract type ShortRateModel <: InterestRateModel end
 
 
 """
+
+    Vasicek(a,b,σ,initial::Yields.Rate)
+
 Via Wikipedia: https://en.wikipedia.org/wiki/Vasicek_model
 """
 struct Vasicek{T<:Yields.Rate} <: ShortRateModel
@@ -20,9 +23,11 @@ end
 """
 outputtype defines what the iterator's type output is for each element
 """
-outputtype(::Type{T}) where {T<:ShortRateModel} = Yields.Rate{Float64, Continuous}
+outputtype(::Type{T}) where {T<:ShortRateModel} = Yields.Rate{Float64, Yields.Continuous}
 
 """
+    CoxIngersollRoss(a,b,σ,initial::Yields.Rate)
+
 Via Wikipedia: https://en.wikipedia.org/wiki/Cox%E2%80%93Ingersoll%E2%80%93Ross_model
 """
 struct CoxIngersollRoss{T<:Yields.Rate} <: ShortRateModel
@@ -37,6 +42,8 @@ function nextrate(M::CoxIngersollRoss{T},prior,time,timestep) where {T}
 end
 
 """
+    HullWhite(a,σ,curve::Yields.AbstractYield)
+
 Via Wikipedia: https://en.wikipedia.org/wiki/Hull%E2%80%93White_model
 """
 struct HullWhite{T} <: ShortRateModel
