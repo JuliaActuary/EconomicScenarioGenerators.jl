@@ -47,6 +47,10 @@ function Base.iterate(sg::ScenarioGenerator{N,T},state) where {N,T<:EconomicMode
     end
 end
 
+function Base.eachindex(sg::ScenarioGenerator{N,T}) where {N,T<:EconomicModel}
+    return Base.OneTo(length(sg))
+end
+
 Base.eltype(::Type{ScenarioGenerator{N,T}}) where {N,T} = outputtype(T)
 
 

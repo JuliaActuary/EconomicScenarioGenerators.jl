@@ -11,7 +11,7 @@ Yields = "d7e99b2f-e7f3-4d9e-9f01-2338fc023ad3"
 [compat]
 ForwardDiff = "^0.10"
 LabelledArrays = "^1"
-Yields = "^2.2"
+Yields = "^3"
 julia = "1.6"
 
 [extras]
