@@ -19,5 +19,15 @@
 
         @test length(s) == 61
 
+        prices = [last(collect(s)) for _ in 1:10_000]
+        dist = LogNormal(
+            log(m.initial) + (m.r-m.σ^2) * s.endtime,
+            √(s.endtime) * m.σ
+            )
+
+        t = HypothesisTests.ExactOneSampleKSTest(prices,dist)
+        @test HypothesisTests.pvalue(t) > 0.01
+
+
     end
 end
