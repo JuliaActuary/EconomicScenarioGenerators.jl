@@ -2,7 +2,7 @@
 @testset "InterestRateModel" begin
 
     @testset "Vasicek" begin
-        m = Vasicek(0.136,0.0168,0.0119,Continuous(0.01))
+        m = Vasicek(0.136,0.0168,0.0119,Yields.Continuous(0.01))
         s = ScenarioGenerator(
                 1.,                              # timestep
                 30.,                             # projection horizon
@@ -23,7 +23,7 @@
     end
 
     @testset "CoxIngersollRoss" begin
-        m = CoxIngersollRoss(0.136,0.0168,0.0119,Continuous(0.01))
+        m = CoxIngersollRoss(0.136,0.0168,0.0119,Yields.Continuous(0.01))
         s = ScenarioGenerator(
                 1.,                              # timestep
                 30.,                             # projection horizon
@@ -72,7 +72,7 @@
         end
 
         @testset "with Rate" begin
-            m = HullWhite(.1,.005,Continuous(0.05))
+            m = HullWhite(.1,.005,Yields.Continuous(0.05))
 
             s = ScenarioGenerator(
                 1.,                              # timestep
