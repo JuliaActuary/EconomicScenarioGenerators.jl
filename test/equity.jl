@@ -21,7 +21,7 @@
 
         prices = [last(collect(s)) for _ in 1:10_000]
         
-        dist = LogNormal(s)
+        dist = price_distribution(s)
 
         # we expect that the prices are lognormally distributed
         # and reject the null hypothesis that they are not if p less than some threshold
