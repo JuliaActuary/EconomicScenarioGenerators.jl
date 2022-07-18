@@ -13,7 +13,12 @@ struct BlackScholesMerton{T,U,V} <:EquityModel
 end
 function nextrate(M::BlackScholesMerton,prior,time,timestep)
     r, q, σ = M.r, M.q, M.σ
-    prior + (r-q)*prior * timestep + prior * σ * sqrt(timestep) * randn()
+    # Hull Options, Futures, & Other Derivatives, 10th ed., pg 470
+    return (
+        prior *
+        exp((r- q - σ^2 / 2) *  timestep + 
+         σ * sqrt(timestep) * randn())
+    )
 end
 
 """

@@ -28,7 +28,7 @@
         # therefore, for test to pass we should fail to reject the null hypothesis and p
         # should be large
         t = HypothesisTests.ExactOneSampleKSTest(prices,dist)
-        @test HypothesisTests.pvalue(t) > 0.01
+        @test HypothesisTests.pvalue(t) > 0.05
 
 
     end
