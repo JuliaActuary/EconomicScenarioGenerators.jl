@@ -27,7 +27,7 @@ struct ScenarioGenerator{N<:Real,T}
 end
 
 function Base.length(sg::ScenarioGenerator{N,T}) where {N,T<:EconomicModel}
-    return length(0:sg.timestep:sg.endtime) 
+    return length(0:sg.timestep:sg.endtime)
 end
 
 function Base.iterate(sg::ScenarioGenerator{N,T}) where {N,T<:EconomicModel}
@@ -37,7 +37,7 @@ function Base.iterate(sg::ScenarioGenerator{N,T}) where {N,T<:EconomicModel}
 end
 
 function Base.iterate(sg::ScenarioGenerator{N,T},state) where {N,T<:EconomicModel}
-    if state.time >= sg.endtime
+    if (state.time > sg.endtime) || (state.time ≈ sg.endtime)
         return nothing
     else
         new_rate = nextrate(sg.model,state.rate,state.time,sg.timestep)

@@ -19,5 +19,18 @@
 
         @test length(s) == 61
 
+        @testset "#14 - odd time steps" begin
+            m = BlackScholesMerton(0.01,0.02,.15,100.)
+
+            s = ScenarioGenerator(
+                           1/252,  # timestep
+                           1., # projection horizon
+                           m,  # model
+                       )
+
+            @test length(collect(s)) == 253
+        end
+            
+
     end
 end
