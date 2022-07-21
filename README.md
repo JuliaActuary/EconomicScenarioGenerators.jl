@@ -172,10 +172,10 @@ projections = [collect(s) for _ in 1:100]
 p = plot()
 
 for p in projections
-    plot!(p,label="")
+    plot!(0:30,p,label="",alpha=0.5)
 end
 
 p
 ```
 
-![BSM Paths](https://user-images.githubusercontent.com/711879/173205216-57983889-e0aa-427b-977b-0a586429a74c.png)
+![BSM Paths](https://user-images.githubusercontent.com/711879/180128072-fe08d285-0edc-4707-a89e-8d14fef23d2a.png)
