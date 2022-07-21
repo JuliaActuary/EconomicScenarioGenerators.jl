@@ -2,6 +2,7 @@ module EconomicScenarioGenerators
 
 import ForwardDiff
 import Yields
+import IterTools
 
 using LabelledArrays
 
@@ -49,6 +50,15 @@ end
 
 function Base.eachindex(sg::ScenarioGenerator{N,T}) where {N,T<:EconomicModel}
     return Base.OneTo(length(sg))
+end
+
+
+function Base.getindex(sg::ScenarioGenerator{N,T},i) where {N,T<:EconomicModel}
+    return IterTools.nth(sg,i)
+end
+
+function Base.lastindex(sg::ScenarioGenerator{N,T}) where {N,T<:EconomicModel}
+    return length(sg)
 end
 
 Base.eltype(::Type{ScenarioGenerator{N,T}}) where {N,T} = outputtype(T)
