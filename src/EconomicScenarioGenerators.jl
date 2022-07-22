@@ -33,17 +33,17 @@ struct ScenarioGenerator{N<:Real,T,R<:AbstractRNG}
     end
 end
 
-function Base.length(sg::ScenarioGenerator{N,T}) where {N,T<:EconomicModel}
+function Base.length(sg::ScenarioGenerator{N,T,R}) where {N,T<:EconomicModel,R}
     return length(0:sg.timestep:sg.endtime)
 end
 
-function Base.iterate(sg::ScenarioGenerator{N,T}) where {N,T<:EconomicModel}
+function Base.iterate(sg::ScenarioGenerator{N,T,R}) where {N,T<:EconomicModel,R}
     initial = initial_value(sg.model,sg.timestep)
     state = @LArray [0,initial] (:time,:rate)
     return (state.rate,state) # TODO: Implement intitial conditions for models
 end
 
-function Base.iterate(sg::ScenarioGenerator{N,T},state) where {N,T<:EconomicModel}
+function Base.iterate(sg::ScenarioGenerator{N,T,R},state) where {N,T<:EconomicModel,R}
     if (state.time > sg.endtime) || (state.time ≈ sg.endtime)
         return nothing
     else
@@ -54,20 +54,20 @@ function Base.iterate(sg::ScenarioGenerator{N,T},state) where {N,T<:EconomicMode
     end
 end
 
-function Base.eachindex(sg::ScenarioGenerator{N,T}) where {N,T<:EconomicModel}
+function Base.eachindex(sg::ScenarioGenerator{N,T,R}) where {N,T<:EconomicModel,R}
     return Base.OneTo(length(sg))
 end
 
 
-function Base.getindex(sg::ScenarioGenerator{N,T},i) where {N,T<:EconomicModel}
+function Base.getindex(sg::ScenarioGenerator{N,T,R},i) where {N,T<:EconomicModel,R}
     return IterTools.nth(sg,i)
 end
 
-function Base.lastindex(sg::ScenarioGenerator{N,T}) where {N,T<:EconomicModel}
+function Base.lastindex(sg::ScenarioGenerator{N,T,R}) where {N,T<:EconomicModel,R}
     return length(sg)
 end
 
-Base.eltype(::Type{ScenarioGenerator{N,T}}) where {N,T} = outputtype(T)
+Base.eltype(::Type{ScenarioGenerator{N,T,R}}) where {N,T,R} = outputtype(T)
 
 
 export Vasicek, CoxIngersollRoss, HullWhite,

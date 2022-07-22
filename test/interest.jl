@@ -11,6 +11,8 @@
 
         @test length(s) == 31
 
+        @test eltype(s) == Yields.Rate{Float64, Yields.Continuous}
+
         s = EconomicScenarioGenerators.ScenarioGenerator(
             0.5,                              # timestep
             30.,                             # projection horizon
@@ -31,6 +33,8 @@
             )
 
         @test length(s) == 31
+
+        @test eltype(s) == Yields.Rate{Float64, Yields.Continuous}
 
         s = EconomicScenarioGenerators.ScenarioGenerator(
             0.5,                              # timestep
@@ -59,6 +63,7 @@
             )
 
             @test length(s) == 31
+            
 
             s = EconomicScenarioGenerators.ScenarioGenerator(
                 0.5,                              # timestep
