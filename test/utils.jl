@@ -8,7 +8,7 @@ function price_distribution(m::BlackScholesMerton,T)
         )
 end
 
-function price_distribution(s::ScenarioGenerator{N,T}) where {N,T<:BlackScholesMerton}
+function price_distribution(s::ScenarioGenerator{N,T,R}) where {N,T<:BlackScholesMerton,R}
     m = s.model
     t = s.endtime
     price_distribution(m,t)

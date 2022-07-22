@@ -19,6 +19,8 @@
 
         @test length(s) == 61
 
+        @test eltype(s) == Float64        
+
         prices = [last(collect(s)) for _ in 1:10_000]
         
         dist = price_distribution(s)
