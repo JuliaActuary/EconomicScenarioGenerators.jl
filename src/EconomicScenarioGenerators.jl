@@ -3,6 +3,7 @@ module EconomicScenarioGenerators
 import ForwardDiff
 import Yields
 import IterTools
+using Random
 
 using LabelledArrays
 
@@ -21,10 +22,15 @@ end
 include("interest.jl")
 include("equity.jl")
 
-struct ScenarioGenerator{N<:Real,T}
+struct ScenarioGenerator{N<:Real,T,R<:AbstractRNG}
     timestep::N
     endtime::N
     model::T
+    RNG::R
+
+    function ScenarioGenerator(timestep::N,endtime::N,model::T,RNG::R=Random.GLOBAL_RNG) where {N<:Real,T<:EconomicModel,R<:AbstractRNG}
+        new{N,T,R}(timestep,endtime,model,RNG)
+    end
 end
 
 function Base.length(sg::ScenarioGenerator{N,T}) where {N,T<:EconomicModel}
@@ -41,7 +47,7 @@ function Base.iterate(sg::ScenarioGenerator{N,T},state) where {N,T<:EconomicMode
     if (state.time > sg.endtime) || (state.time ≈ sg.endtime)
         return nothing
     else
-        new_rate = nextrate(sg.model,state.rate,state.time,sg.timestep)
+        new_rate = nextrate(sg.RNG,sg.model,state.rate,state.time,sg.timestep)
         state.time += sg.timestep
         state.rate = new_rate
         return (state.rate, state)

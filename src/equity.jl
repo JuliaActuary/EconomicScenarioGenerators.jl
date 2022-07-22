@@ -11,13 +11,13 @@ struct BlackScholesMerton{T,U,V} <:EquityModel
     σ::V # roughly equivalent to the volatility in the usual lognormal model multiplied by F^{1-β}_{0}
     initial::Float64
 end
-function nextrate(M::BlackScholesMerton,prior,time,timestep)
+function nextrate(RNG,M::BlackScholesMerton,prior,time,timestep)
     r, q, σ = M.r, M.q, M.σ
     # Hull Options, Futures, & Other Derivatives, 10th ed., pg 470
     return (
         prior *
         exp((r- q - σ^2 / 2) *  timestep + 
-         σ * sqrt(timestep) * randn())
+         σ * sqrt(timestep) * randn(RNG))
     )
 end
 
