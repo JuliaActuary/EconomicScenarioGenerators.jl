@@ -179,3 +179,18 @@ p
 ```
 
 ![BSM Paths](https://user-images.githubusercontent.com/711879/180128072-fe08d285-0edc-4707-a89e-8d14fef23d2a.png)
+
+## Benchmarks
+
+Generating 10,000 daily timesteps for 1 year (252 business days) with a Black-Scholes-Merton model:
+
+
+| library                    | language | time (absolute) | time (relative) |
+|----------------------------|----------|-----------------|-----------------|
+| EconomicScenarioGenerators | Julia    | 29.6ms          | 1x              |
+| pyesg                      | Python   | 135ms           | 5x              |
+
+## Other ESG packages
+
+- Python
+  - https://github.com/jason-ash/pyesg
