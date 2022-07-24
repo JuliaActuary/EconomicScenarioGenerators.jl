@@ -185,10 +185,11 @@ p
 Generating 10,000 daily timesteps for 1 year (252 business days) with a Black-Scholes-Merton model:
 
 
-| library                    | language | time (absolute) | time (relative) |
-|----------------------------|----------|-----------------|-----------------|
-| EconomicScenarioGenerators | Julia    | 29.6ms          | 1x              |
-| pyesg                      | Python   | 135ms           | 5x              |
+| library                    | multi-threaded? | language | time (absolute) | time (relative) |
+|----------------------------|----------|----------|-----------------|-----------------|
+| EconomicScenarioGenerators | Yes    | Julia    | 12ms          | 1x              |
+| EconomicScenarioGenerators | No    | Julia    | 40ms          | 4x              |
+| pyesg                      | No?   | Python   | 135ms           | 11x              |
 
 ## Other ESG packages
 
