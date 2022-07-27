@@ -72,9 +72,9 @@ function nextrate(RNG,M::Vasicek{T},prior,time,timestep) where T
 end
 
 """
-outputtype defines what the iterator's type output is for each element
+__outputtype defines what the iterator's type output is for each element
 """
-outputtype(::Type{T}) where {T<:ShortRateModel} = Yields.Rate{Float64, Yields.Continuous}
+__outputtype(::Type{T}) where {T<:ShortRateModel} = Yields.Rate{Float64, Yields.Continuous}
 
 """
     CoxIngersollRoss(a,b,σ,initial::Yields.Rate)
@@ -188,9 +188,9 @@ function θ(M::HullWhite{T},time) where {T<:Real}
 end
 
 """
-outputtype defines what the iterator's type output is for each element
+__outputtype defines what the iterator's type output is for each element
 """
-outputtype(::Type{HullWhite{T}}) where {T} = Yields.__ratetype(T)
+__outputtype(::Type{HullWhite{T}}) where {T} = Yields.__ratetype(T)
 
 function initial_value(M::HullWhite{T},timestep) where {T}
     Yields.forward(M.curve,0,timestep)

@@ -46,9 +46,9 @@ function nextrate(RNG,M::BlackScholesMerton,prior,time,timestep)
 end
 
 """
-outputtype defines what the iterator's type output is for each element
+__outputtype defines what the iterator's type output is for each element
 """
-outputtype(::Type{T}) where {T<:EquityModel} = Float64
+__outputtype(::Type{T}) where {T<:EquityModel} = Float64
 function __initial_short_rate(M::BlackScholesMerton,timestep)
     M.initial
 end

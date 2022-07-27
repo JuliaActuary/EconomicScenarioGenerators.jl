@@ -67,7 +67,7 @@ function Base.lastindex(sg::ScenarioGenerator{N,T,R}) where {N,T<:EconomicModel,
     return length(sg)
 end
 
-Base.eltype(::Type{ScenarioGenerator{N,T,R}}) where {N,T,R} = outputtype(T)
+Base.eltype(::Type{ScenarioGenerator{N,T,R}}) where {N,T,R} = __outputtype(T)
 
 
 export Vasicek, CoxIngersollRoss, HullWhite,
