@@ -49,12 +49,22 @@
         s = EconomicScenarioGenerators.ScenarioGenerator(
             0.5,                              # timestep
             30.,                             # projection horizon
-            m
+            m,
+            StableRNG(1)
         )
 
         @test length(s) == 61
 
         @test Yields.Forward(s) isa Yields.AbstractYield
+
+        E(m,t) = Yields.rate(m.initial) * exp(-m.a*t) + m.b * (1 - exp(-m.a*t))
+        V(m,t) = Yields.rate(m.initial) * (m.σ ^2) / m.a * (exp(-m.a*t) - exp(-2*m.a*t)) + m.b * m.σ^2 / (2*m.a)*(1-exp(-m.a*t))^2
+
+        samples = [Yields.rate(last(s)) for _ in 1:10000]
+
+        # https://en.wikipedia.org/wiki/Vasicek_model#Asymptotic_mean_and_variance
+        @test mean(samples) ≈ E(m,s.endtime) atol = 0.01 
+        @test var(samples) ≈ V(m,s.endtime) atol = 0.001 
     end
     
     @testset "Hull White" begin
