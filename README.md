@@ -30,8 +30,19 @@ using EconomicScenarioGenerators
 using Yields
 ```
 
+## Models
 
 ### Interest Rate Models
+
+- `Vasicek`
+- `CoxIngersolRoss`
+- `HullWhite`
+
+### EquityModels
+
+- `BlackScholesMerton`
+
+### Interest Rate Model Examples
 
 #### Vasicek
 
@@ -144,7 +155,7 @@ p
 
 ![image](https://user-images.githubusercontent.com/711879/171550813-e3a57557-c7f8-4080-a6c7-88691d5c1be6.png)
 
-### Equity Models
+### Equity Model Examples
 
 #### BlackScholesMerton
 
