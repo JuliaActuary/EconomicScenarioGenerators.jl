@@ -7,7 +7,13 @@ abstract type ShortRateModel <: InterestRateModel end
 
     Vasicek(a,b,σ,initial::Yields.Rate)
 
-Via Wikipedia: https://en.wikipedia.org/wiki/Vasicek_model
+A one-factor interest rate model. Parameters:
+
+- `a` characterizes the speed of mean reversion
+- `b` is the long term mean level
+- `σ` is the instantaneous volatility
+
+See more on Wikipedia: https://en.wikipedia.org/wiki/Vasicek_model
 """
 struct Vasicek{T<:Yields.Rate} <: ShortRateModel
     a::Float64 # 0.136

@@ -16,12 +16,22 @@
         s = EconomicScenarioGenerators.ScenarioGenerator(
             0.5,                              # timestep
             30.,                             # projection horizon
-            m
+            m,
+            StableRNG(1)
         )
 
         @test length(s) == 61
 
         @test Yields.Forward(s) isa Yields.AbstractYield
+
+        E(m,t) = Yields.rate(m.initial) * exp(-m.a*t) + m.b * (1 - exp(-m.a*t))
+        V(m,t) = (m.σ ^2) / (2 * m.a) * (1 - exp(-m.a*t))
+
+        samples = [Yields.rate(last(s)) for _ in 1:10000]
+
+        # https://en.wikipedia.org/wiki/Vasicek_model#Asymptotic_mean_and_variance
+        @test mean(samples) ≈ E(m,s.endtime) atol = 0.01 
+        @test var(samples) ≈ V(m,s.endtime) atol = 0.001  
     end
 
     @testset "CoxIngersollRoss" begin
