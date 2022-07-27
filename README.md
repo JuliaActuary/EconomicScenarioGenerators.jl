@@ -198,11 +198,11 @@ Generating 10,000 scenarios of daily timesteps for 1 year (252 business days) wi
 
 | library                    | multi-threaded? | pre-allocated arrays? |  language | time (absolute) | time (relative) |
 |----------------------------|-----------------|-----------------------|-----------------|-----------------|---------|
-| EconomicScenarioGenerators | 8x    |Yes | Julia    | 6ms          | 1x              |
-| EconomicScenarioGenerators | 8x    |No | Julia    | 12ms          | 2x              |
-| EconomicScenarioGenerators | No    |Yes | Julia    | 19ms          | 3x              |
-| EconomicScenarioGenerators | No    |No | Julia    | 40ms          | 7x              |
-| pyesg                      | No?   |No | Python   | 135ms           | 22x              |
+| EconomicScenarioGenerators | 8x    |Yes | Julia    | 5ms          | 1x              |
+| EconomicScenarioGenerators | 8x    |No | Julia    | 6ms          | 1x              |
+| EconomicScenarioGenerators | No    |Yes | Julia    | 19ms          | 4x              |
+| EconomicScenarioGenerators | No    |No | Julia    | 20ms          | 4x              |
+| pyesg                      | No?   |No | Python   | 135ms           | 27x              |
 
 ## Other ESG packages
 
