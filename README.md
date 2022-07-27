@@ -193,14 +193,16 @@ p
 
 ## Benchmarks
 
-Generating 10,000 daily timesteps for 1 year (252 business days) with a Black-Scholes-Merton model:
+Generating 10,000 scenarios of daily timesteps for 1 year (252 business days) with a Black-Scholes-Merton model:
 
 
-| library                    | multi-threaded? | language | time (absolute) | time (relative) |
-|----------------------------|----------|----------|-----------------|-----------------|
-| EconomicScenarioGenerators | Yes    | Julia    | 12ms          | 1x              |
-| EconomicScenarioGenerators | No    | Julia    | 40ms          | 4x              |
-| pyesg                      | No?   | Python   | 135ms           | 11x              |
+| library                    | multi-threaded? | pre-allocated arrays? |  language | time (absolute) | time (relative) |
+|----------------------------|-----------------|-----------------------|-----------------|-----------------|---------|
+| EconomicScenarioGenerators | 8x    |Yes | Julia    | 6ms          | 1x              |
+| EconomicScenarioGenerators | 8x    |No | Julia    | 12ms          | 2x              |
+| EconomicScenarioGenerators | No    |Yes | Julia    | 19ms          | 3x              |
+| EconomicScenarioGenerators | No    |No | Julia    | 40ms          | 7x              |
+| pyesg                      | No?   |No | Python   | 135ms           | 22x              |
 
 ## Other ESG packages
 

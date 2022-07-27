@@ -6,14 +6,12 @@ version = "0.3.4"
 [deps]
 ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
 IterTools = "c8e1da08-722c-5040-9ed9-7db0dc04731e"
-LabelledArrays = "2ee39098-c373-598a-b85f-a56591580800"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 Yields = "d7e99b2f-e7f3-4d9e-9f01-2338fc023ad3"
 
 [compat]
 ForwardDiff = "^0.10"
 IterTools = "^1.4"
-LabelledArrays = "^1"
 Yields = "^3"
 julia = "1.6"
 
