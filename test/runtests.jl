@@ -1,5 +1,6 @@
 using EconomicScenarioGenerators
 using Test
+using ActuaryUtilities
 using Yields
 using Distributions
 using HypothesisTests

@@ -88,12 +88,23 @@
             s = EconomicScenarioGenerators.ScenarioGenerator(
                 0.5,                              # timestep
                 30.,                             # projection horizon
-                m
+                m,
+                StableRNG(1)
             )
 
             @test length(s) == 61
 
             @test Yields.Forward(s) isa Yields.AbstractYield
+
+            cfs = [10 for _ in 1:20]
+
+            @testset "Market Consistency" begin
+                market_price = pv(c,cfs)
+
+                samples = [pv(Yields.Forward(s),cfs) for _ in 1:5000]
+
+                @test mean(samples) ≈ market_price rtol = 0.01
+            end
         end
 
         @testset "with Rate" begin

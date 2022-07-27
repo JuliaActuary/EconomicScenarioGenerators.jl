@@ -146,6 +146,7 @@ end
 """
     HullWhite(a,σ,curve::Yields.AbstractYield)
 
+An interest model that should be market consistent with the given `curve`.
 
 Via Wikipedia: https://en.wikipedia.org/wiki/Hull%E2%80%93White_model
 """

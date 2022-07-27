@@ -1,4 +1,5 @@
 [deps]
+ActuaryUtilities = "bdd23359-8b1c-4f88-b89b-d11982a786f4"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 EconomicScenarioGenerators = "1d18cbdc-9ca7-45fd-a8b2-b9434f9145be"
 HypothesisTests = "09f84164-cd44-5f33-b23f-e6b0d136a0d5"
