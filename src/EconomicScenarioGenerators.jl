@@ -5,8 +5,6 @@ import Yields
 import IterTools
 using Random
 
-using LabelledArrays
-
 abstract type EconomicModel end
 
 function initial_value(m::T) where {T<:EconomicModel}
@@ -39,18 +37,20 @@ end
 
 function Base.iterate(sg::ScenarioGenerator{N,T,R}) where {N,T<:EconomicModel,R}
     initial = initial_value(sg.model,sg.timestep)
-    state = @LArray [0,initial] (:time,:rate)
-    return (state.rate,state) # TODO: Implement intitial conditions for models
+    state = (time=zero(sg.timestep),value=initial)
+    return (state.value,state) # TODO: Implement intitial conditions for models
 end
 
 function Base.iterate(sg::ScenarioGenerator{N,T,R},state) where {N,T<:EconomicModel,R}
     if (state.time > sg.endtime) || (state.time ≈ sg.endtime)
         return nothing
     else
-        new_rate = nextrate(sg.RNG,sg.model,state.rate,state.time,sg.timestep)
-        state.time += sg.timestep
-        state.rate = new_rate
-        return (state.rate, state)
+        new_rate = nextrate(sg.RNG,sg.model,state.value,state.time,sg.timestep)
+        state = (
+            time = state.time + sg.timestep,
+            value = new_rate
+        )
+        return (state.value, state)
     end
 end
 
