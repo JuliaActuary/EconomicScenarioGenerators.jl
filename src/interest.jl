@@ -172,7 +172,7 @@ function θ(M::HullWhite{T},time,timestep) where {T<:Yields.AbstractYield}
     δf = ForwardDiff.derivative(f, time)
     f_t = f(time)
 
-    return δf/timestep + f_t * a  + M.σ^2 / (2*a)*(1-exp(-2*a*time))
+    return δf + f_t * a  + M.σ^2 / (2*a)*(1-exp(-2*a*time))
 
 end
 
