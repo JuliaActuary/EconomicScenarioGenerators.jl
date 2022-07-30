@@ -103,12 +103,13 @@
 
                 samples = [pv(Yields.Forward(s),cfs) for _ in 1:5000]
 
-                @test_broken mean(samples) ≈ market_price rtol = 0.01
+                @test_broken mean(samples) ≈ market_price atol = 0.01
             end
         end
 
         @testset "with Rate" begin
-            m = HullWhite(.1,.005,Yields.Continuous(0.05))
+            c = Yields.Continuous(0.05)
+            m = HullWhite(.1,.005,c)
 
             s = ScenarioGenerator(
                 1.,                              # timestep
@@ -127,6 +128,16 @@
             @test length(s) == 61
 
             @test Yields.Forward(s) isa Yields.AbstractYieldCurve
+
+            cfs = [10 for _ in 1:20]
+
+            @testset "Market Consistency" begin
+                market_price = pv(c,cfs)
+
+                samples = [pv(Yields.Forward(s),cfs) for _ in 1:5000]
+
+                @test_broken mean(samples) ≈ market_price atol = 0.01
+            end
 
         end
     end
