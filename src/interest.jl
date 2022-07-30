@@ -159,12 +159,12 @@ end
 
 # how would HullWhite be constructed if not giving it a curve?
 function nextrate(RNG,M::HullWhite{T},prior,time,timestep) where {T}
-    θ_t = θ(M,time)
+    θ_t = θ(M,time,timestep)
     # https://quantpie.co.uk/srm/hull_white_sr.php
     prior + (θ_t - M.a * prior) * timestep + M.σ * √(timestep) * randn(RNG)
 end
 
-function θ(M::HullWhite{T},time) where {T<:Yields.AbstractYield}
+function θ(M::HullWhite{T},time,timestep) where {T<:Yields.AbstractYield}
     # https://quantpie.co.uk/srm/hull_white_sr.php
     # https://quant.stackexchange.com/questions/8724/how-to-calibrate-hull-white-from-zero-curve
     f(t) = Yields.rate(Yields.forward(M.curve,t))
@@ -172,11 +172,11 @@ function θ(M::HullWhite{T},time) where {T<:Yields.AbstractYield}
     δf = ForwardDiff.derivative(f, time)
     f_t = f(time)
 
-    return δf + f_t * a  + M.σ^2 / (2*a)*(1-exp(-2*a*time))
+    return δf/timestep + f_t * a  + M.σ^2 / (2*a)*(1-exp(-2*a*time))
 
 end
 
-function θ(M::HullWhite{T},time) where {T<:Real}
+function θ(M::HullWhite{T},time,timestep) where {T<:Real}
     # https://quantpie.co.uk/srm/hull_white_sr.php
     # https://quant.stackexchange.com/questions/8724/how-to-calibrate-hull-white-from-zero-curve
     a = M.a
