@@ -103,7 +103,7 @@
 
                 samples = [pv(Yields.Forward(s),cfs) for _ in 1:5000]
 
-                @test_broken mean(samples) ≈ market_price atol = 0.01
+                @test_broken mean(samples) ≈ market_price rtol = 0.01
             end
         end
 
@@ -114,7 +114,8 @@
             s = ScenarioGenerator(
                 1.,                              # timestep
                 30.,                             # projection horizon
-                m
+                m,
+                StableRNG(1)
             )
 
             @test length(s) == 31
@@ -122,7 +123,8 @@
             s = EconomicScenarioGenerators.ScenarioGenerator(
                 0.5,                              # timestep
                 30.,                             # projection horizon
-                m
+                m,
+                StableRNG(1)
             )
 
             @test length(s) == 61
@@ -134,9 +136,9 @@
             @testset "Market Consistency" begin
                 market_price = pv(c,cfs)
 
-                samples = [pv(Yields.Forward(s),cfs) for _ in 1:5000]
+                μ = mean(pv(Yields.Forward(s),cfs) for _ in 1:5000)
 
-                @test_broken mean(samples) ≈ market_price atol = 0.01
+                @test μ ≈ market_price rtol = 0.005
             end
 
         end
