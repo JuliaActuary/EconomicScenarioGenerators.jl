@@ -69,9 +69,9 @@ end
 
 Base.eltype(::Type{ScenarioGenerator{N,T,R}}) where {N,T,R} = __outputtype(T)
 
-
+include("Yields.jl")
 export Vasicek, CoxIngersollRoss, HullWhite,
         BlackScholesMerton,ConstantElasticityofVariance,
-        ScenarioGenerator
+        ScenarioGenerator, YieldCurve
 
 end

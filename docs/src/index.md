@@ -56,7 +56,7 @@ end
 And the package integrates with [Yields.jl](https://github.com/JuliaActuary/Yields.jl) if loaded:
 
 ```julia
-Yields.Forward(s)
+YieldCurve(s)
 
 ```
 
@@ -118,7 +118,7 @@ Create 1000 yield curves from the scenario generator:
 
 ```julia
 n = 1000
-curves = [Yields.Forward(s) for i in 1:n]
+curves = [YieldCurve(s) for i in 1:n]
 ```julia
 
 Plot the result:
