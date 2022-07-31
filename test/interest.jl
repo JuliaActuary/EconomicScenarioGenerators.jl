@@ -22,7 +22,7 @@
 
         @test length(s) == 61
 
-        @test Yields.Forward(s) isa Yields.AbstractYield
+        @test YieldCurve(s) isa Yields.AbstractYield
 
         E(m,t) = Yields.rate(m.initial) * exp(-m.a*t) + m.b * (1 - exp(-m.a*t))
         V(m,t) = (m.σ ^2) / (2 * m.a) * (1 - exp(-m.a*t))
@@ -55,7 +55,7 @@
 
         @test length(s) == 61
 
-        @test Yields.Forward(s) isa Yields.AbstractYield
+        @test YieldCurve(s) isa Yields.AbstractYield
 
         E(m,t) = Yields.rate(m.initial) * exp(-m.a*t) + m.b * (1 - exp(-m.a*t))
         V(m,t) = Yields.rate(m.initial) * (m.σ ^2) / m.a * (exp(-m.a*t) - exp(-2*m.a*t)) + m.b * m.σ^2 / (2*m.a)*(1-exp(-m.a*t))^2
@@ -74,7 +74,7 @@
             mats = [1/12, 2/12, 3/12, 6/12, 1, 2, 3, 5, 7, 10, 20, 30]
             c = Yields.CMT(rates,mats)
 
-            m = HullWhite(.1,.005,c)
+            m = HullWhite(.1,.001,c)
 
             s = ScenarioGenerator(
                 1.,                              # timestep
@@ -94,26 +94,28 @@
 
             @test length(s) == 61
 
-            @test Yields.Forward(s) isa Yields.AbstractYield
+            @test YieldCurve(s) isa Yields.AbstractYield
 
             cfs = [10 for _ in 1:20]
 
             @testset "Market Consistency" begin
                 market_price = pv(c,cfs)
 
-                samples = [pv(Yields.Forward(s),cfs) for _ in 1:5000]
+                samples = [pv(YieldCurve(s),cfs) for _ in 1:100]
 
-                @test_broken mean(samples) ≈ market_price rtol = 0.01
+                @test mean(samples) ≈ market_price rtol = 0.01
             end
         end
 
         @testset "with Rate" begin
-            m = HullWhite(.1,.005,Yields.Continuous(0.05))
+            c = Yields.Continuous(0.03)
+            m = HullWhite(.1,.001,c)
 
             s = ScenarioGenerator(
                 1.,                              # timestep
                 30.,                             # projection horizon
-                m
+                m,
+                StableRNG(1)
             )
 
             @test length(s) == 31
@@ -121,12 +123,41 @@
             s = EconomicScenarioGenerators.ScenarioGenerator(
                 0.5,                              # timestep
                 30.,                             # projection horizon
-                m
+                m,
+                StableRNG(1)
             )
 
             @test length(s) == 61
 
-            @test Yields.Forward(s) isa Yields.AbstractYieldCurve
+            @test YieldCurve(s) isa Yields.AbstractYieldCurve
+
+            cfs = [10 for _ in 1:20]
+
+            @testset "Market Consistency" begin
+                market_price = pv(c,cfs)
+
+                μ = mean(pv(YieldCurve(s),cfs) for _ in 1:100)
+
+                @test μ ≈ market_price rtol = 0.005
+            end
+
+            @testset "Market Consistency, high volatility" begin
+                c = Yields.Continuous(0.03)
+                m = HullWhite(.1,.01,c)
+    
+                s = ScenarioGenerator(
+                    1.,                              # timestep
+                    30.,                             # projection horizon
+                    m,
+                    StableRNG(1)
+                )
+                market_price = pv(c,cfs)
+
+                # this shouldn't error ideally, see issue #33
+                @test_throws DomainError mean(pv(YieldCurve(s),cfs) for _ in 1:1000)
+
+                # @test μ ≈ market_price rtol = 0.005
+            end
 
         end
     end

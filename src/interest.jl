@@ -16,7 +16,7 @@ A one-factor interest rate model. Parameters:
 See more on Wikipedia: https://en.wikipedia.org/wiki/Vasicek_model
 
 
-Can be reinterpreted as a yield curve from Yields.jl with `Yields.Forward(s::ScenarioGenerator)`
+Can be reinterpreted as a yield curve from Yields.jl with `YieldCurve(s::ScenarioGenerator)`
 
 # Example
 ```julia-repl
@@ -37,7 +37,7 @@ julia> collect(s)
  ⋮
  Yields.Rate{Float64, Continuous}(-0.0027467625238898194, Continuous())
 
- julia> Yields.Forward(s)
+ julia> YieldCurve(s)
 
               ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Yield Curve (Yields.BootstrapCurve)⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀           
               ┌────────────────────────────────────────────────────────────┐           
@@ -88,7 +88,7 @@ __outputtype(::Type{T}) where {T<:ShortRateModel} = Yields.Rate{Float64, Yields.
 Via Wikipedia: https://en.wikipedia.org/wiki/Cox%E2%80%93Ingersoll%E2%80%93Ross_model
 
 
-Can be reinterpreted as a yield curve from Yields.jl with `Yields.Forward(s::ScenarioGenerator)`
+Can be reinterpreted as a yield curve from Yields.jl with `YieldCurve(s::ScenarioGenerator)`
 
 # Example
 ```julia-repl
@@ -109,7 +109,7 @@ julia> s = EconomicScenarioGenerators.ScenarioGenerator(
         ⋮
         Yields.Rate{Float64, Continuous}(0.01170589378629289, Continuous())
 
-julia> Yields.Forward(s)
+julia> YieldCurve(s)
 
         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Yield Curve (Yields.BootstrapCurve)⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀           
         ┌────────────────────────────────────────────────────────────┐           
@@ -159,24 +159,25 @@ end
 
 # how would HullWhite be constructed if not giving it a curve?
 function nextrate(RNG,M::HullWhite{T},prior,time,timestep) where {T}
-    θ_t = θ(M,time)
+    θ_t = θ(M,time+timestep,timestep)
     # https://quantpie.co.uk/srm/hull_white_sr.php
     prior + (θ_t - M.a * prior) * timestep + M.σ * √(timestep) * randn(RNG)
 end
 
-function θ(M::HullWhite{T},time) where {T<:Yields.AbstractYield}
+function θ(M::HullWhite{T},time,timestep) where {T<:Yields.AbstractYield}
     # https://quantpie.co.uk/srm/hull_white_sr.php
     # https://quant.stackexchange.com/questions/8724/how-to-calibrate-hull-white-from-zero-curve
-    f(t) = Yields.rate(Yields.forward(M.curve,t))
+    # https://mdpi-res.com/d_attachment/mathematics/mathematics-08-01719/article_deploy/mathematics-08-01719-v2.pdf?version=1603181408
     a = M.a
-    δf = ForwardDiff.derivative(f, time)
-    f_t = f(time)
+    f(t) = Yields.discount(M.curve,t[1])
+    δf = -only(ForwardDiff.hessian(f,[time])) 
+    f_t = -only(ForwardDiff.gradient(f,[time]))
 
     return δf + f_t * a  + M.σ^2 / (2*a)*(1-exp(-2*a*time))
 
 end
 
-function θ(M::HullWhite{T},time) where {T<:Real}
+function θ(M::HullWhite{T},time,timestep) where {T<:Real}
     # https://quantpie.co.uk/srm/hull_white_sr.php
     # https://quant.stackexchange.com/questions/8724/how-to-calibrate-hull-white-from-zero-curve
     a = M.a
