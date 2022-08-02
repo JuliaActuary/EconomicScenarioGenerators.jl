@@ -169,7 +169,7 @@ function θ(M::HullWhite{T},time,timestep) where {T<:Yields.AbstractYield}
     # https://quant.stackexchange.com/questions/8724/how-to-calibrate-hull-white-from-zero-curve
     # https://mdpi-res.com/d_attachment/mathematics/mathematics-08-01719/article_deploy/mathematics-08-01719-v2.pdf?version=1603181408
     a = M.a
-    f(t) = Yields.discount(M.curve,t[1])
+    f(t) = log(Yields.discount(M.curve,t[1]))
     δf = -only(ForwardDiff.hessian(f,[time])) 
     f_t = -only(ForwardDiff.gradient(f,[time]))
 
