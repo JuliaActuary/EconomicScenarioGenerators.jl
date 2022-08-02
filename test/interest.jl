@@ -141,24 +141,6 @@
                 @test μ ≈ market_price rtol = 0.005
             end
 
-            @testset "Market Consistency, high volatility" begin
-                c = Yields.Continuous(0.03)
-                m = HullWhite(.1,.01,c)
-    
-                s = ScenarioGenerator(
-                    1.,                              # timestep
-                    30.,                             # projection horizon
-                    m,
-                    StableRNG(1)
-                )
-                market_price = pv(c,cfs)
-
-                # this shouldn't error ideally, see issue #33
-                @test_throws DomainError mean(pv(YieldCurve(s),cfs) for _ in 1:1000)
-
-                # @test μ ≈ market_price rtol = 0.005
-            end
-
         end
     end
 
