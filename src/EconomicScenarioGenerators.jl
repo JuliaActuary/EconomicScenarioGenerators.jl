@@ -37,7 +37,7 @@ end
 
 function Base.iterate(sg::ScenarioGenerator{N,T,R}) where {N,T<:EconomicModel,R}
     initial = initial_value(sg.model,sg.timestep)
-    state = (time=zero(sg.timestep),value=initial)
+    state = (time=zero(sg.timestep)::N,value=initial)
     return (state.value,state) # TODO: Implement intitial conditions for models
 end
 
