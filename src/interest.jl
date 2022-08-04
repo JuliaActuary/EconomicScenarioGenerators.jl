@@ -170,8 +170,8 @@ function θ(M::HullWhite{T},time,timestep) where {T<:Yields.AbstractYield}
     # https://mdpi-res.com/d_attachment/mathematics/mathematics-08-01719/article_deploy/mathematics-08-01719-v2.pdf?version=1603181408
     a = M.a
     f(t) = log(Yields.discount(M.curve,t[1]))
-    δf = -only(ForwardDiff.hessian(f,[time])) 
-    f_t = -only(ForwardDiff.gradient(f,[time]))
+    δf = -only(ForwardDiff.hessian(f,[time]))::Float64 
+    f_t = -only(ForwardDiff.gradient(f,[time]))::Float64
 
     return δf + f_t * a  + M.σ^2 / (2*a)*(1-exp(-2*a*time))
 

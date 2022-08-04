@@ -12,6 +12,8 @@ function __zeros_times(sg::ScenarioGenerator{N,T,R}) where {N,T<:InterestRateMod
     times = sg.timestep:sg.timestep:(sg.endtime+sg.timestep)
     # compute the accumulated discount factor (ZCB price)
     zeros = cumsum(sg .* sg.timestep) ./ times
+    # the broadcasting versions is about 1/3 fewer allocations
+    # zeros = Iterators.map(/,Iterators.accumulate(+,sg),times)
 
     return zeros, times
 end
