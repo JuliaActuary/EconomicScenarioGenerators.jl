@@ -4,6 +4,9 @@ import ForwardDiff
 import Yields
 import IterTools
 using Random
+using Copulas
+using Distributions
+using SplitApplyCombine
 
 abstract type EconomicModel end
 
@@ -19,6 +22,8 @@ end
 
 include("interest.jl")
 include("equity.jl")
+
+abstract type AbstractScenarioGenerator end
 
 struct ScenarioGenerator{N<:Real,T,R<:AbstractRNG}
     timestep::N
@@ -37,7 +42,7 @@ end
 
 function Base.iterate(sg::ScenarioGenerator{N,T,R}) where {N,T<:EconomicModel,R}
     initial = initial_value(sg.model,sg.timestep)
-    state = (time=zero(sg.timestep)::N,value=initial)
+    state = (variate=randn(sg.RNG),time=zero(sg.timestep)::N,value=initial)
     return (state.value,state) # TODO: Implement intitial conditions for models
 end
 
@@ -45,7 +50,7 @@ function Base.iterate(sg::ScenarioGenerator{N,T,R},state) where {N,T<:EconomicMo
     if (state.time > sg.endtime) || (state.time ≈ sg.endtime)
         return nothing
     else
-        new_rate = nextrate(sg.RNG,sg.model,state.value,state.time,sg.timestep)
+        new_rate = nextrate(sg.RNG,state.kind,sg.model,state.value,state.time,sg.timestep,state.variate)
         state = (
             time = state.time + sg.timestep,
             value = new_rate
@@ -69,9 +74,54 @@ end
 
 Base.eltype(::Type{ScenarioGenerator{N,T,R}}) where {N,T,R} = __outputtype(T)
 
+#TODO Need to assert that the timepoints for the sgs are consistent
+struct Correlated{T,U,R} <: AbstractScenarioGenerator
+    sg::Vector{T}
+    copula::U
+    RNG::R
+    function Correlated(generators::Vector{T},copula::U,RNG::R=Random.GLOBAL_RNG) where {T<:ScenarioGenerator,U,R<:AbstractRNG}
+        new{T,U,R}(generators,copula,RNG)
+    end
+end
+
+
+function Base.iterate(sgc::Correlated) 
+    fst = first(sgc.sg)
+    initial = map(s->initial_value(s.model,s.timestep), sgc.sg)
+    variates = rand(sgc.RNG,sgc.copula) # CDF
+    # values = [(variate=variates[i],variates = variates,time=zero(fst.timestep),value=x) for (i,x) in enumerate(initial)]
+    
+    state = (
+        variates = variates,
+        time = zero(fst.timestep),
+        value = initial,        
+        )
+        
+    return (state.value,state)
+end
+
+function Base.iterate(sgc::Correlated,state)
+    fst = first(sgc.sg)
+    if (state.time > fst.endtime) || (state.time ≈ fst.endtime)
+        return nothing
+    else
+        new_vals = [nextrate(sg.model,state.value[i],state.time,fst.timestep,state.variates[i]) for (i,sg) in enumerate(sgc.sg)]
+
+        state = (
+            variates = rand!(sgc.RNG,sgc.copula,state.variates),
+            time = state.time + fst.timestep,
+            value = new_vals,
+            )
+        return (state.value, state)
+    end
+end
+
+Base.length(sgc::Correlated) = length(first(sgc.sg))
+Base.eltype(::Type{Correlated{N,T,R}}) where {N,T,R} = Vector{eltype(N)}
+
 include("Yields.jl")
 export Vasicek, CoxIngersollRoss, HullWhite,
         BlackScholesMerton,ConstantElasticityofVariance,
-        ScenarioGenerator, YieldCurve
+        ScenarioGenerator, YieldCurve, Correlated
 
 end
