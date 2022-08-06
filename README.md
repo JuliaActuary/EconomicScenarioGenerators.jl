@@ -7,7 +7,7 @@
 
 Help wanted!
 
-This package is very early in its development cycle. It may not work if you try to run it at this point.
+**This package is in Technical Preview Stage: The API is stabilizing and tests are passing but it has not been used in practice for very long. Please report any issues, provide feedback, and request specific features using the Discussions or Issues in this repository.**
 
 Interested in developing economic scenario generators in Julia? Consider contributing to this package. Open an issue, create a pull request, or discuss on the Julia Zulip's #actuary channel.
 
