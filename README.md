@@ -13,8 +13,6 @@ Interested in developing economic scenario generators in Julia? Consider contrib
 
 ## Usage
 
-This package is in a pre-release stage and is not well tested and the API may change.
-
 EconoicScenarioGenerators.jl is now available via the General Registry. Install and use in the normal way:
 1. Add EconomicScenarioGenerators via Pkg
 2. `import EconomicScenarioGenerators` or `using EconomicScenarioGenerators` in your code
