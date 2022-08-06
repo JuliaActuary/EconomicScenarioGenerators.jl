@@ -74,12 +74,13 @@ end
 
 Base.eltype(::Type{ScenarioGenerator{N,T,R}}) where {N,T,R} = __outputtype(T)
 
-#TODO Need to assert that the timepoints for the sgs are consistent
 struct Correlated{T,U,R} <: AbstractScenarioGenerator
     sg::Vector{T}
     copula::U
     RNG::R
     function Correlated(generators::Vector{T},copula::U,RNG::R=Random.GLOBAL_RNG) where {T<:ScenarioGenerator,U,R<:AbstractRNG}
+        @assert allequal(generators.timestep) "All component generators must have the same `timestep`."
+        @assert allequal(generators.endtime) "All component generators must have the same `endpoint`."
         new{T,U,R}(generators,copula,RNG)
     end
 end
