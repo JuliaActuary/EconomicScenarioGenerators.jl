@@ -25,7 +25,7 @@ include("equity.jl")
 
 abstract type AbstractScenarioGenerator end
 
-struct ScenarioGenerator{N<:Real,T,R<:AbstractRNG}
+struct ScenarioGenerator{N<:Real,T,R<:AbstractRNG} <: AbstractScenarioGenerator
     timestep::N
     endtime::N
     model::T
@@ -42,7 +42,7 @@ end
 
 function Base.iterate(sg::ScenarioGenerator{N,T,R}) where {N,T<:EconomicModel,R}
     initial = initial_value(sg.model,sg.timestep)
-    state = (variate=randn(sg.RNG),time=zero(sg.timestep)::N,value=initial)
+    state = (time=zero(sg.timestep)::N,value=initial)
     return (state.value,state) # TODO: Implement intitial conditions for models
 end
 
@@ -50,10 +50,11 @@ function Base.iterate(sg::ScenarioGenerator{N,T,R},state) where {N,T<:EconomicMo
     if (state.time > sg.endtime) || (state.time ≈ sg.endtime)
         return nothing
     else
-        new_rate = nextrate(sg.RNG,state.kind,sg.model,state.value,state.time,sg.timestep,state.variate)
+        variate = rand(sg.RNG) # a quantile
+        new_value = nextrate(sg.model,state.value,state.time,sg.timestep,variate)
         state = (
             time = state.time + sg.timestep,
-            value = new_rate
+            value = new_value
         )
         return (state.value, state)
     end
@@ -96,9 +97,6 @@ function Base.iterate(sgc::Correlated)
         scenariovalue = nextrate(sg.model,scenariovalue,t,sg.timestep,variates[n,i])
         scenariovalue 
     end
-    # initial = map(s->initial_value(s.model,s.timestep), sgc.sg)
-    # [nextrate(sg.model,state.value[i],state.time,fst.timestep,state.variates[i]) for (i,sg) in enumerate(sgc.sg[1]]
-    # values = [(variate=variates[i],variates = variates,time=zero(fst.timestep),value=x) for (i,x) in enumerate(initial)]
     
     state = (
         variates = variates,
