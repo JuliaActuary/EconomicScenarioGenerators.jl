@@ -51,7 +51,7 @@ function Base.iterate(sg::ScenarioGenerator{N,T,R},state) where {N,T<:EconomicMo
         return nothing
     else
         variate = rand(sg.RNG) # a quantile
-        new_value = nextrate(sg.model,state.value,state.time,sg.timestep,variate)
+        new_value = nextvalue(sg.model,state.value,state.time,sg.timestep,variate)
         state = (
             time = state.time + sg.timestep,
             value = new_value
@@ -94,7 +94,7 @@ function Base.iterate(sgc::Correlated)
     times = sg.timestep:sg.timestep:(sg.endtime+sg.timestep)
     scenariovalue = initial_value(sg.model,first(times))
     values = map(enumerate(times)) do (i,t)
-        scenariovalue = nextrate(sg.model,scenariovalue,t,sg.timestep,variates[n,i])
+        scenariovalue = nextvalue(sg.model,scenariovalue,t,sg.timestep,variates[n,i])
         scenariovalue 
     end
     
@@ -115,7 +115,7 @@ function Base.iterate(sgc::Correlated,state)
         times = sg.timestep:sg.timestep:(sg.endtime+sg.timestep)
         scenariovalue = initial_value(sg.model,first(times))
         values = map(enumerate(times)) do (i,t)
-            scenariovalue = nextrate(sg.model,scenariovalue,t,sg.timestep,state.variates[n,i])
+            scenariovalue = nextvalue(sg.model,scenariovalue,t,sg.timestep,state.variates[n,i])
             scenariovalue 
         end
         state = (

@@ -38,7 +38,7 @@ end
 
 
 
-function nextrate(M::BlackScholesMerton,prior,time,timestep,variate)
+function nextvalue(M::BlackScholesMerton,prior,time,timestep,variate)
     variate = quantile(Normal(),variate)
     r, q, σ = M.r, M.q, M.σ
     # Hull Options, Futures, & Other Derivatives, 10th ed., pg 470
