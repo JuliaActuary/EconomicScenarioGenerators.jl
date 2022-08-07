@@ -87,37 +87,48 @@ end
 
 
 function Base.iterate(sgc::Correlated) 
-    fst = first(sgc.sg)
-    initial = map(s->initial_value(s.model,s.timestep), sgc.sg)
-    variates = rand(sgc.RNG,sgc.copula) # CDF
+    n = 1
+    sg = sgc.sg[n]
+    variates = rand(sgc.RNG,sgc.copula,length(sg)) # CDF
+    times = sg.timestep:sg.timestep:(sg.endtime+sg.timestep)
+    scenariovalue = initial_value(sg.model,first(times))
+    values = map(enumerate(times)) do (i,t)
+        scenariovalue = nextrate(sg.model,scenariovalue,t,sg.timestep,variates[n,i])
+        scenariovalue 
+    end
+    # initial = map(s->initial_value(s.model,s.timestep), sgc.sg)
+    # [nextrate(sg.model,state.value[i],state.time,fst.timestep,state.variates[i]) for (i,sg) in enumerate(sgc.sg[1]]
     # values = [(variate=variates[i],variates = variates,time=zero(fst.timestep),value=x) for (i,x) in enumerate(initial)]
     
     state = (
         variates = variates,
-        time = zero(fst.timestep),
-        value = initial,        
+        n = 2,
         )
         
-    return (state.value,state)
+    return (values,state)
 end
 
 function Base.iterate(sgc::Correlated,state)
-    fst = first(sgc.sg)
-    if (state.time > fst.endtime) || (state.time ≈ fst.endtime)
+    if state.n > length(sgc.sg)
         return nothing
     else
-        new_vals = [nextrate(sg.model,state.value[i],state.time,fst.timestep,state.variates[i]) for (i,sg) in enumerate(sgc.sg)]
-
+        n = state.n
+        sg = sgc.sg[n]
+        times = sg.timestep:sg.timestep:(sg.endtime+sg.timestep)
+        scenariovalue = initial_value(sg.model,first(times))
+        values = map(enumerate(times)) do (i,t)
+            scenariovalue = nextrate(sg.model,scenariovalue,t,sg.timestep,state.variates[n,i])
+            scenariovalue 
+        end
         state = (
-            variates = rand!(sgc.RNG,sgc.copula,state.variates),
-            time = state.time + fst.timestep,
-            value = new_vals,
+            variates = state.variates,
+            n = n+1,
             )
-        return (state.value, state)
+        return (values, state)
     end
 end
 
-Base.length(sgc::Correlated) = length(first(sgc.sg))
+Base.length(sgc::Correlated) = length(sgc.sg)
 Base.eltype(::Type{Correlated{N,T,R}}) where {N,T,R} = Vector{eltype(N)}
 
 include("Yields.jl")
