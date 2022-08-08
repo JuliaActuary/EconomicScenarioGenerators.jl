@@ -189,6 +189,35 @@ p
 
 ![BSM Paths](https://user-images.githubusercontent.com/711879/180128072-fe08d285-0edc-4707-a89e-8d14fef23d2a.png)
 
+## Correlated Scenarios
+
+Combined with `using Copulas`, you can create correlated scenarios with a given copula. See `?Correlated` for the docstring on creating a correlated set of scenario generators.
+
+### Example
+
+Create two equity paths that are 90% correlated:
+
+```
+using EconomicScenarioGenerators, Copulas
+
+m = BlackScholesMerton(0.01,0.02,.15,100.)
+s = ScenarioGenerator(
+                      1,  # timestep
+                      30, # projection horizon
+                      m,  # model
+                  )
+
+ss = [s,s] # these don't have to be the exact same, but do need same shape
+g = GaussianCopula([1. 0.9; 0.9 1.]) # 90% correlated
+c = Correlated(ss,g)
+
+collect(c)
+
+using Plots
+plot(collect(c))
+```
+![plot_2](https://user-images.githubusercontent.com/711879/183233379-c9dda6ba-c945-4e69-937d-aa7835198f5e.svg)
+
 ## Benchmarks
 
 Generating 10,000 scenarios of daily timesteps for 1 year (252 business days) with a Black-Scholes-Merton model:
