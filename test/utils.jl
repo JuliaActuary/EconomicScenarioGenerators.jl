@@ -15,7 +15,5 @@ function price_distribution(s::ScenarioGenerator{N,T,R}) where {N,T<:BlackSchole
 end
 
 function ratio(x::Vector{T}) where {T}
-    map(2:(length(x))) do i
-        return x[i] / x[i-1]
-    end
+    @views x[begin:end-1] ./ x[begin+1:end]
 end
