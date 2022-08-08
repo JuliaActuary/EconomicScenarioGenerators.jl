@@ -6,7 +6,6 @@ import IterTools
 using Random
 using Copulas
 using Distributions
-using SplitApplyCombine
 
 abstract type EconomicModel end
 
