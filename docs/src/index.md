@@ -212,7 +212,7 @@ s = ScenarioGenerator(
                   )
 
 ss = [s,s] # these don't have to be the exact same, but do need same shape
-g = GaussianCopula([1. 0.9; 0.9 1.]) # 90% correlated
+g = ClaytonCopula(2,7) # highly dependent
 c = Correlated(ss,g)
 
 collect(c)
