@@ -131,8 +131,9 @@ struct Correlated{T,U,R} <: AbstractScenarioGenerator
     copula::U
     RNG::R
     function Correlated(generators::Vector{T},copula::U,RNG::R=Random.GLOBAL_RNG) where {T<:ScenarioGenerator,U,R<:AbstractRNG}
-        @assert allequal(g.timestep for g in generators) "All component generators must have the same `timestep`."
-        @assert allequal(g.endtime for g in generators) "All component generators must have the same `endpoint`."
+        fst = first(generators)
+        @assert all(fst.timestep == g.timestep for g in generators) "All component generators must have the same `timestep`."
+        @assert all(fst.timestep == g.endtime for g in generators) "All component generators must have the same `endpoint`."
         new{T,U,R}(generators,copula,RNG)
     end
 end
