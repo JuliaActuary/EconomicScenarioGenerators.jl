@@ -40,5 +40,36 @@
             ρ = cor(hcat(ratio.(x)...))
             @test ρ[1,2] ≈ 0.9 atol = 0.03
         end
+
+        @testset "Vasicek" begin
+            m = Vasicek(0.136,0.0168,0.0119,Yields.Continuous(0.01))
+            s = ScenarioGenerator(
+                    1.,                              # timestep
+                    30.,                             # projection horizon
+                    m
+                )
+            g = GaussianCopula([1. 0.9; 0.9 1.])
+            c = Correlated(ss,g,StableRNG(1))
+
+            x = collect(c)
+
+            ρ = cor(hcat(ratio.(x)...))
+            @test ρ[1,2] ≈ 0.9 atol = 0.03
+        end
+        @testset "CIR" begin
+            m = CoxIngersollRoss(0.136,0.0168,0.0119,Yields.Continuous(0.01))
+            s = ScenarioGenerator(
+                    1.,                              # timestep
+                    30.,                             # projection horizon
+                    m
+                )
+            g = GaussianCopula([1. 0.9; 0.9 1.])
+            c = Correlated(ss,g,StableRNG(1))
+
+            x = collect(c)
+
+            ρ = cor(hcat(ratio.(x)...))
+            @test ρ[1,2] ≈ 0.9 atol = 0.03
+        end
     end
 end

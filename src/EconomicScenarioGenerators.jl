@@ -25,6 +25,26 @@ include("equity.jl")
 
 abstract type AbstractScenarioGenerator end
 
+
+"""
+    ScenarioGenerator(timestep::N,endtime::N,model,RNG::AbstractRNG) where {N<:Real}
+
+A `ScenarioGenerator` is an iterator which yields the time series of the model. It takes the parameters of the scenario generation such as `timestep` and `endtime` (the time horizon). `model` is any EconomicModel from the `EconomicScenarioGenerators` package.
+
+A `ScenarioGenerator` can be `iterate`d or `collect`ed. 
+
+# Examples
+
+```julia
+m = Vasicek(0.136,0.0168,0.0119,Continuous(0.01)) # a, b, σ, initial Rate
+s = ScenarioGenerator(
+        1,  # timestep
+        30, # projection horizon
+        m,  # model
+    )
+```
+
+"""
 struct ScenarioGenerator{N<:Real,T,R<:AbstractRNG} <: AbstractScenarioGenerator
     timestep::N
     endtime::N
@@ -75,6 +95,37 @@ end
 
 Base.eltype(::Type{ScenarioGenerator{N,T,R}}) where {N,T,R} = __outputtype(T)
 
+
+"""
+    Correlated(v::Vector{ScenarioGenerator},copula,RNG::AbstractRNG)
+
+An iterator which uses the given copula to correlate the outcomes of the underling ScenarioGenerators. The copula returns the sampled CDF which the individual models will interpret according to their own logic (e.g. the random variate for the BlackScholesMerton model assumes a normal variate within the diffusion process).
+
+The `time` and `timestep` of the underlying ScenarioGenerators are asserted to be the same upon construction.
+
+A `Correlated` can be `iterate`d or `collect`ed. It will iterate through each sub-scenario generator and yield the time series of each (as opposed to iterating through each timestep for all models at each step).
+
+# Examples
+
+```julia
+using EconomicScenarioGenerators, Copulas
+
+m = BlackScholesMerton(0.01,0.02,.15,100.)
+s = ScenarioGenerator(
+                      1,  # timestep
+                      30, # projection horizon
+                      m,  # model
+                  )
+
+ss = [s,s] # these don't have to be the exact same
+g = GaussianCopula([1. 0.9; 0.9 1.])
+c = Correlated(ss,g)
+
+# collect a vector of two correlated paths.
+collect(c)
+```
+
+"""
 struct Correlated{T,U,R} <: AbstractScenarioGenerator
     sg::Vector{T}
     copula::U
