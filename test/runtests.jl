@@ -3,6 +3,7 @@ using Test
 using ActuaryUtilities
 using Yields
 using Distributions
+using Copulas
 using HypothesisTests
 using StatsBase
 using StableRNGs
