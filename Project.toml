@@ -1,7 +1,7 @@
 name = "EconomicScenarioGenerators"
 uuid = "1d18cbdc-9ca7-45fd-a8b2-b9434f9145be"
 authors = ["Alec Loudenback <alecloudenback@gmail.com> and contributors"]
-version = "0.3.8"
+version = "0.4.0"
 
 [deps]
 Copulas = "ae264745-0b69-425e-9d9d-cf662c5eec93"
@@ -13,6 +13,7 @@ SplitApplyCombine = "03a91e81-4c3e-53e1-a0a4-9c0c8f19dd66"
 Yields = "d7e99b2f-e7f3-4d9e-9f01-2338fc023ad3"
 
 [compat]
+Copulas = "0.1"
 ForwardDiff = "^0.10"
 IterTools = "^1.4"
 Yields = "^3"
