@@ -137,7 +137,7 @@ struct Correlated{T,U,R} <: AbstractScenarioGenerator
         new{T,U,R}(generators,copula,RNG)
     end
 end
-
+Base.Broadcast.broadcastable(x::T) where {T<:Correlated} = Ref(x)
 
 function Base.iterate(sgc::Correlated) 
     n = 1
