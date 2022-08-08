@@ -14,7 +14,8 @@
         s = EconomicScenarioGenerators.ScenarioGenerator(
             0.5,                              # timestep
             30.,                             # projection horizon
-            m
+            m,
+            StableRNG(1)
         )
 
         @test length(s) == 61

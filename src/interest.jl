@@ -67,8 +67,9 @@ struct Vasicek{T<:Yields.Rate} <: ShortRateModel
     initial::T # 0.01
 end
 
-function nextrate(RNG,M::Vasicek{T},prior,time,timestep) where T
-    prior + M.a * (M.b - prior) * timestep + M.σ * sqrt(timestep) * randn(RNG)
+function nextvalue(M::Vasicek{T},prior,time,timestep,variate) where T
+    variate = quantile(Normal(),variate)
+    prior + M.a * (M.b - prior) * timestep + M.σ * sqrt(timestep) * variate
 end
 
 """
@@ -139,8 +140,9 @@ struct CoxIngersollRoss{T<:Yields.Rate} <: ShortRateModel
     initial::T # 0.01
 end
 
-function nextrate(RNG,M::CoxIngersollRoss{T},prior,time,timestep) where {T}
-    prior + M.a * (M.b - prior) * timestep + M.σ * sqrt(Yields.rate(prior)) * randn(RNG)
+function nextvalue(M::CoxIngersollRoss{T},prior,time,timestep,variate) where {T}
+    variate = quantile(Normal(),variate)
+    prior + M.a * (M.b - prior) * timestep + M.σ * sqrt(Yields.rate(prior)) * variate
 end
 
 """
@@ -158,10 +160,11 @@ end
 # See Yields.jl for HullWhite with a YieldCurve defining theta
 
 # how would HullWhite be constructed if not giving it a curve?
-function nextrate(RNG,M::HullWhite{T},prior,time,timestep) where {T}
+function nextvalue(M::HullWhite{T},prior,time,timestep,variate) where {T}
+    variate = quantile(Normal(),variate)
     θ_t = θ(M,time+timestep,timestep)
     # https://quantpie.co.uk/srm/hull_white_sr.php
-    prior + (θ_t - M.a * prior) * timestep + M.σ * √(timestep) * randn(RNG)
+    prior + (θ_t - M.a * prior) * timestep + M.σ * √(timestep) * variate
 end
 
 function θ(M::HullWhite{T},time,timestep) where {T<:Yields.AbstractYield}

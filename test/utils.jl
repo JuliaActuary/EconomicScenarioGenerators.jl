@@ -13,3 +13,7 @@ function price_distribution(s::ScenarioGenerator{N,T,R}) where {N,T<:BlackSchole
     t = s.endtime
     price_distribution(m,t)
 end
+
+function ratio(x::Vector{T}) where {T}
+    @views x[begin:end-1] ./ x[begin+1:end]
+end
