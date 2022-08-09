@@ -206,7 +206,7 @@ s = ScenarioGenerator(
                   )
 
 ss = [s,s] # these don't have to be the exact same, but do need same shape
-g = GaussianCopula([1. 0.9; 0.9 1.]) # 90% correlated
+g = ClaytonCopula(2,7) # highly dependendant model
 c = Correlated(ss,g)
 
 collect(c)
@@ -214,7 +214,7 @@ collect(c)
 using Plots
 plot(collect(c))
 ```
-![plot_2](https://user-images.githubusercontent.com/711879/183233379-c9dda6ba-c945-4e69-937d-aa7835198f5e.svg)
+![plot_20](https://user-images.githubusercontent.com/711879/183552235-9c44f0a7-932d-4e81-9ac1-9115628d3374.svg)
 
 ## Benchmarks
 

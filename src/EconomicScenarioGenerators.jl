@@ -117,7 +117,7 @@ s = ScenarioGenerator(
                   )
 
 ss = [s,s] # these don't have to be the exact same
-g = GaussianCopula([1. 0.9; 0.9 1.])
+g = ClaytonCopula(2,7)
 c = Correlated(ss,g)
 
 # collect a vector of two correlated paths.
