@@ -214,7 +214,7 @@ collect(c)
 using Plots
 plot(collect(c))
 ```
-![plot_2](https://user-images.githubusercontent.com/711879/183233379-c9dda6ba-c945-4e69-937d-aa7835198f5e.svg)
+![plot_20](https://user-images.githubusercontent.com/711879/183552235-9c44f0a7-932d-4e81-9ac1-9115628d3374.svg)
 
 ## Benchmarks
 
