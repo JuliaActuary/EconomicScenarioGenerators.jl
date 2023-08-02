@@ -1,23 +1,15 @@
 module EconomicScenarioGenerators
 
 import ForwardDiff
-import Yields
-import IterTools
+import FinanceModels
+import FinanceCore
+using Transducers
+using Transducers: @next, complete, __foldl__, asfoldable, next
 using Random
 using Copulas
 using Distributions
 
 abstract type EconomicModel end
-
-function initial_value(m::T) where {T<:EconomicModel}
-    m.initial
-end
-
-# This is the version that gets called by the iterator as some models depend
-# on the presented timestep and for those specific methods can be written
-function initial_value(m::T,timestep) where {T<:EconomicModel}
-    initial_value(m)
-end
 
 include("interest.jl")
 include("equity.jl")
@@ -50,50 +42,30 @@ struct ScenarioGenerator{N<:Real,T,R<:AbstractRNG} <: AbstractScenarioGenerator
     model::T
     RNG::R
 
-    function ScenarioGenerator(timestep::N,endtime::N,model::T,RNG::R=Random.GLOBAL_RNG) where {N<:Real,T<:EconomicModel,R<:AbstractRNG}
-        new{N,T,R}(timestep,endtime,model,RNG)
+    function ScenarioGenerator(timestep::N, endtime::N, model::T, RNG::R=Random.GLOBAL_RNG) where {N<:Real,T<:EconomicModel,R<:AbstractRNG}
+        new{N,T,R}(timestep, endtime, model, RNG)
     end
 end
 
-function Base.length(sg::ScenarioGenerator{N,T,R}) where {N,T<:EconomicModel,R}
-    return length(0:sg.timestep:sg.endtime)
-end
 
-function Base.iterate(sg::ScenarioGenerator{N,T,R}) where {N,T<:EconomicModel,R}
-    initial = initial_value(sg.model,sg.timestep)
-    state = (time=zero(sg.timestep)::N,value=initial)
-    return (state.value,state) # TODO: Implement intitial conditions for models
-end
-
-function Base.iterate(sg::ScenarioGenerator{N,T,R},state) where {N,T<:EconomicModel,R}
-    if (state.time > sg.endtime) || (state.time ≈ sg.endtime)
-        return nothing
-    else
-        variate = rand(sg.RNG) # a quantile
-        new_value = nextvalue(sg.model,state.value,state.time,sg.timestep,variate)
-        state = (
-            time = state.time + sg.timestep,
-            value = new_value
-        )
-        return (state.value, state)
+function Transducers.__foldl__(rf, val, sg::ScenarioGenerator{N,T,R}) where {N,T<:BlackScholesMerton,R}
+    Δt = sg.timestep
+    prior = sg.model.initial
+    for t in 0:Δt:sg.endtime
+        if iszero(t)
+            val = @next(rf, val, prior)
+        else
+            variate = rand(sg.RNG) # a quantile
+            prior = nextvalue(sg.model, prior, t, Δt, variate)
+            val = next(rf, val, prior)
+            val isa Reduced && return val
+            val
+        end
     end
+    return complete(rf, val)
 end
 
-function Base.eachindex(sg::ScenarioGenerator{N,T,R}) where {N,T<:EconomicModel,R}
-    return Base.OneTo(length(sg))
-end
-
-
-function Base.getindex(sg::ScenarioGenerator{N,T,R},i) where {N,T<:EconomicModel,R}
-    return IterTools.nth(sg,i)
-end
-
-function Base.lastindex(sg::ScenarioGenerator{N,T,R}) where {N,T<:EconomicModel,R}
-    return length(sg)
-end
-
-Base.eltype(::Type{ScenarioGenerator{N,T,R}}) where {N,T,R} = __outputtype(T)
-
+Base.collect(s::ScenarioGenerator) = s |> Map(identity) |> collect
 
 """
     Correlated(v::Vector{ScenarioGenerator},copula,RNG::AbstractRNG)
@@ -129,50 +101,50 @@ struct Correlated{T,U,R} <: AbstractScenarioGenerator
     sg::Vector{T}
     copula::U
     RNG::R
-    function Correlated(generators::Vector{T},copula::U,RNG::R=Random.GLOBAL_RNG) where {T<:ScenarioGenerator,U,R<:AbstractRNG}
+    function Correlated(generators::Vector{T}, copula::U, RNG::R=Random.GLOBAL_RNG) where {T<:ScenarioGenerator,U,R<:AbstractRNG}
         fst = first(generators)
         @assert all(fst.timestep == g.timestep for g in generators) "All component generators must have the same `timestep`."
         @assert all(fst.endtime == g.endtime for g in generators) "All component generators must have the same `endpoint`."
-        new{T,U,R}(generators,copula,RNG)
+        new{T,U,R}(generators, copula, RNG)
     end
 end
 Base.Broadcast.broadcastable(x::T) where {T<:Correlated} = Ref(x)
 
-function Base.iterate(sgc::Correlated) 
+function Base.iterate(sgc::Correlated)
     n = 1
     sg = sgc.sg[n]
-    variates = rand(sgc.RNG,sgc.copula,length(sg)) # CDF
+    variates = rand(sgc.RNG, sgc.copula, length(sg)) # CDF
     times = sg.timestep:sg.timestep:(sg.endtime+sg.timestep)
-    scenariovalue = initial_value(sg.model,first(times))
-    values = map(enumerate(times)) do (i,t)
-        scenariovalue = nextvalue(sg.model,scenariovalue,t,sg.timestep,variates[n,i])
-        scenariovalue 
+    scenariovalue = initial_value(sg.model, first(times))
+    values = map(enumerate(times)) do (i, t)
+        scenariovalue = nextvalue(sg.model, scenariovalue, t, sg.timestep, variates[n, i])
+        scenariovalue
     end
-    
+
     state = (
-        variates = variates,
-        n = 2,
-        )
-        
-    return (values,state)
+        variates=variates,
+        n=2,
+    )
+
+    return (values, state)
 end
 
-function Base.iterate(sgc::Correlated,state)
+function Base.iterate(sgc::Correlated, state)
     if state.n > length(sgc.sg)
         return nothing
     else
         n = state.n
         sg = sgc.sg[n]
         times = sg.timestep:sg.timestep:(sg.endtime+sg.timestep)
-        scenariovalue = initial_value(sg.model,first(times))
-        values = map(enumerate(times)) do (i,t)
-            scenariovalue = nextvalue(sg.model,scenariovalue,t,sg.timestep,state.variates[n,i])
-            scenariovalue 
+        scenariovalue = initial_value(sg.model, first(times))
+        values = map(enumerate(times)) do (i, t)
+            scenariovalue = nextvalue(sg.model, scenariovalue, t, sg.timestep, state.variates[n, i])
+            scenariovalue
         end
         state = (
-            variates = state.variates,
-            n = n+1,
-            )
+            variates=state.variates,
+            n=n + 1,
+        )
         return (values, state)
     end
 end
@@ -182,7 +154,7 @@ Base.eltype(::Type{Correlated{N,T,R}}) where {N,T,R} = Vector{eltype(N)}
 
 include("Yields.jl")
 export Vasicek, CoxIngersollRoss, HullWhite,
-        BlackScholesMerton,ConstantElasticityofVariance,
-        ScenarioGenerator, YieldCurve, Correlated
+    BlackScholesMerton, ConstantElasticityofVariance,
+    ScenarioGenerator, YieldCurve, Correlated
 
 end

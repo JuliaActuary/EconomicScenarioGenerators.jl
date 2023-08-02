@@ -29,7 +29,7 @@ julia> collect(s)
 ```
 
 """
-struct BlackScholesMerton{T,U,V} <:EquityModel
+struct BlackScholesMerton{T,U,V} <: EquityModel
     r::T # risk free rate
     q::U # dividend yield
     σ::V # roughly equivalent to the volatility in the usual lognormal model multiplied by F^{1-β}_{0}
@@ -38,22 +38,21 @@ end
 
 
 
-function nextvalue(M::BlackScholesMerton,prior,time,timestep,variate)
-    variate = quantile(Normal(),variate)
+function nextvalue(M::BlackScholesMerton, prior, time, timestep, variate)
+    variate = quantile(Normal(), variate)
     r, q, σ = M.r, M.q, M.σ
     # Hull Options, Futures, & Other Derivatives, 10th ed., pg 470
     return (
         prior *
-        exp((r- q - σ^2 / 2) *  timestep + 
-         σ * sqrt(timestep) * variate)
+        exp((r - q - σ^2 / 2) * timestep +
+            σ * sqrt(timestep) * variate)
     )
 end
 
 """
 __outputtype defines what the iterator's type output is for each element
 """
-__outputtype(::Type{T}) where {T<:EquityModel} = Float64
-function __initial_short_rate(M::BlackScholesMerton,timestep)
+function __initial_short_rate(M::BlackScholesMerton, timestep)
     M.initial
 end
 
@@ -62,7 +61,7 @@ end
 
 Where `initial` is the initial value of the security.
 """
-struct ConstantElasticityofVariance{T,U,V,W} <:EquityModel
+struct ConstantElasticityofVariance{T,U,V,W} <: EquityModel
     r::T # risk free rate
     q::U # dividend yield
     σ::V # roughly equivalent to the volatility in the usual lognormal model multiplied by F^{1-β}_{0}
