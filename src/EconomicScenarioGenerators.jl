@@ -8,6 +8,7 @@ using Transducers: @next, complete, __foldl__, asfoldable, next
 using Random
 using Copulas
 using Distributions
+using StaticArrays
 
 abstract type EconomicModel end
 
@@ -47,8 +48,7 @@ struct ScenarioGenerator{N<:Real,T,R<:AbstractRNG} <: AbstractScenarioGenerator
     end
 end
 
-
-function Transducers.__foldl__(rf, val, sg::ScenarioGenerator{N,T,R}) where {N,T<:BlackScholesMerton,R}
+@inline function Transducers.__foldl__(rf, val, sg::ScenarioGenerator{N,T,R}) where {N,T,R}
     Δt = sg.timestep
     prior = sg.model.initial
     for t in 0:Δt:sg.endtime
@@ -57,15 +57,13 @@ function Transducers.__foldl__(rf, val, sg::ScenarioGenerator{N,T,R}) where {N,T
         else
             variate = rand(sg.RNG) # a quantile
             prior = nextvalue(sg.model, prior, t, Δt, variate)
-            val = next(rf, val, prior)
-            val isa Reduced && return val
-            val
+            val = @next(rf, val, prior)
         end
     end
     return complete(rf, val)
 end
 
-Base.collect(s::ScenarioGenerator) = s |> Map(identity) |> collect
+Base.collect(s::AbstractScenarioGenerator) = s |> Map(identity) |> collect
 
 """
     Correlated(v::Vector{ScenarioGenerator},copula,RNG::AbstractRNG)
@@ -110,47 +108,25 @@ struct Correlated{T,U,R} <: AbstractScenarioGenerator
 end
 Base.Broadcast.broadcastable(x::T) where {T<:Correlated} = Ref(x)
 
-function Base.iterate(sgc::Correlated)
-    n = 1
-    sg = sgc.sg[n]
-    variates = rand(sgc.RNG, sgc.copula, length(sg)) # CDF
-    times = sg.timestep:sg.timestep:(sg.endtime+sg.timestep)
-    scenariovalue = initial_value(sg.model, first(times))
-    values = map(enumerate(times)) do (i, t)
-        scenariovalue = nextvalue(sg.model, scenariovalue, t, sg.timestep, variates[n, i])
-        scenariovalue
-    end
 
-    state = (
-        variates=variates,
-        n=2,
-    )
-
-    return (values, state)
-end
-
-function Base.iterate(sgc::Correlated, state)
-    if state.n > length(sgc.sg)
-        return nothing
-    else
-        n = state.n
-        sg = sgc.sg[n]
-        times = sg.timestep:sg.timestep:(sg.endtime+sg.timestep)
-        scenariovalue = initial_value(sg.model, first(times))
-        values = map(enumerate(times)) do (i, t)
-            scenariovalue = nextvalue(sg.model, scenariovalue, t, sg.timestep, state.variates[n, i])
-            scenariovalue
+@inline function Transducers.__foldl__(rf, val, sgc::Correlated)
+    n = length(sgc.sg)
+    Δt = first(sgc.sg).timestep
+    prior = [sg.model.initial for sg in sgc.sg]
+    for t in 0:Δt:first(sgc.sg).endtime
+        if iszero(t)
+            val = @next(rf, val, tuple(prior...))
+        else
+            @show t
+            variates = rand(sgc.RNG, sgc.copula, n) # CDF
+            map!(prior, 1:n) do i
+                nextvalue(sgc.sg[i].model, prior[i], t, Δt, variates[i])
+            end
+            val = @next(rf, val, tuple(prior...))
         end
-        state = (
-            variates=state.variates,
-            n=n + 1,
-        )
-        return (values, state)
     end
+    return complete(rf, val)
 end
-
-Base.length(sgc::Correlated) = length(sgc.sg)
-Base.eltype(::Type{Correlated{N,T,R}}) where {N,T,R} = Vector{eltype(N)}
 
 include("Yields.jl")
 export Vasicek, CoxIngersollRoss, HullWhite,
