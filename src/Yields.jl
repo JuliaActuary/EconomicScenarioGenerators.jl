@@ -1,4 +1,4 @@
-function YieldCurve(sg::ScenarioGenerator{N,T,R}; model=FinanceModels.Spline.Linear(), method=FinanceModels.Fit.Bootstrap()) where {N,T<:InterestRateModel,R}
+function YieldCurve(sg::ScenarioGenerator{N,T,R}; model=FinanceModels.Spline.Cubic(), method=FinanceModels.Fit.Bootstrap()) where {N,T<:InterestRateModel,R}
     qs = Quotes(sg)
     FinanceModels.fit(model, qs, method)
 
