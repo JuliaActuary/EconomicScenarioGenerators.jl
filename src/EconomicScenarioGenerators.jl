@@ -8,7 +8,6 @@ using Transducers: @next, complete, __foldl__, asfoldable, next
 using Random
 using Copulas
 using Distributions
-using StaticArrays
 
 abstract type EconomicModel end
 
@@ -50,7 +49,7 @@ end
 
 @inline function Transducers.__foldl__(rf, val, sg::ScenarioGenerator{N,T,R}) where {N,T,R}
     Δt = sg.timestep
-    prior = sg.model.initial
+    prior = __initial_value(sg)
     for t in 0:Δt:sg.endtime
         if iszero(t)
             val = @next(rf, val, prior)
@@ -112,7 +111,7 @@ Base.Broadcast.broadcastable(x::T) where {T<:Correlated} = Ref(x)
 @inline function Transducers.__foldl__(rf, val, sgc::Correlated)
     n = length(sgc.sg)
     Δt = first(sgc.sg).timestep
-    prior = [sg.model.initial for sg in sgc.sg]
+    prior = [__initial_value(sg) for sg in sgc.sg]
     for t in 0:Δt:first(sgc.sg).endtime
         if iszero(t)
             val = @next(rf, val, tuple(prior...))
@@ -127,6 +126,10 @@ Base.Broadcast.broadcastable(x::T) where {T<:Correlated} = Ref(x)
     end
     return complete(rf, val)
 end
+
+__initial_value(sg::ScenarioGenerator) = __initial_value(sg.model, sg.timestep)
+__initial_value(m, timestep) = m.initial
+
 
 include("Yields.jl")
 export Vasicek, CoxIngersollRoss, HullWhite,

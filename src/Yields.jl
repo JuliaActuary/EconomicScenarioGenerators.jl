@@ -1,8 +1,8 @@
-# function YieldCurve(sg::ScenarioGenerator{N,T,R}) where {N,T<:InterestRateModel,R}
-#     rates, times = __zeros_times(sg)
-#     Yields.Zero(rates,times)
+function YieldCurve(sg::ScenarioGenerator{N,T,R}; model=FinanceModels.Spline.Linear(), method=FinanceModels.Fit.Bootstrap()) where {N,T<:InterestRateModel,R}
+    qs = Quotes(sg)
+    FinanceModels.fit(model, qs, method)
 
-# end
+end
 
 # function YieldCurve(C::T) where {T<:Correlated}
 #     timestep = first(C.sg).timestep
@@ -18,12 +18,12 @@
 #     log(rate) / -time
 # end
 
-# function __zeros_times(sg::ScenarioGenerator{N,T,R}) where {N,T<:InterestRateModel,R}
-#     times = sg.timestep:sg.timestep:(sg.endtime+sg.timestep)
-#     # compute the accumulated discount factor (ZCB price)
-#     zeros = cumsum(sg .* sg.timestep) ./ times
-#     # the broadcasting versions is about 1/3 fewer allocations
-#     # zeros = Iterators.map(/,Iterators.accumulate(+,sg),times)
+function Quotes(sg::ScenarioGenerator{N,T,R}) where {N,T<:InterestRateModel,R}
+    times = sg.timestep:sg.timestep:(sg.endtime+sg.timestep)
+    # compute the accumulated discount factor (ZCB price)
+    zeros = cumsum(sg .* sg.timestep) ./ times
+    # the broadcasting versions is about 1/3 fewer allocations
+    # zeros = Iterators.map(/,Iterators.accumulate(+,sg),times)
 
-#     return zeros, times
-# end
+    return FinanceModels.ZCBYield.(zeros, times)
+end

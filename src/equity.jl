@@ -49,12 +49,6 @@ function nextvalue(M::BlackScholesMerton, prior, time, timestep, variate)
     )
 end
 
-"""
-__outputtype defines what the iterator's type output is for each element
-"""
-function __initial_short_rate(M::BlackScholesMerton, timestep)
-    M.initial
-end
 
 """
     ConstantElasticityofVariance(r,q,σ,β,initial)
