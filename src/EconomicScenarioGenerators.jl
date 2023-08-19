@@ -18,7 +18,7 @@ abstract type AbstractScenarioGenerator end
 
 
 """
-    ScenarioGenerator(timestep::N,endtime::N,model,RNG::AbstractRNG) where {N<:Real}
+    ScenarioGenerator(timestep::M,endtime::N,model,RNG::AbstractRNG) where {M<:Real, N<:Real}
 
 A `ScenarioGenerator` is an iterator which yields the time series of the model. It takes the parameters of the scenario generation such as `timestep` and `endtime` (the time horizon). `model` is any EconomicModel from the `EconomicScenarioGenerators` package.
 
@@ -36,18 +36,18 @@ s = ScenarioGenerator(
 ```
 
 """
-struct ScenarioGenerator{N<:Real,T,R<:AbstractRNG} <: AbstractScenarioGenerator
-    timestep::N
+struct ScenarioGenerator{M<:Real,N<:Real,T,R<:AbstractRNG} <: AbstractScenarioGenerator
+    timestep::M
     endtime::N
     model::T
     RNG::R
 
-    function ScenarioGenerator(timestep::N, endtime::N, model::T, RNG::R=Random.GLOBAL_RNG) where {N<:Real,T<:EconomicModel,R<:AbstractRNG}
-        new{N,T,R}(timestep, endtime, model, RNG)
+    function ScenarioGenerator(timestep::M, endtime::N, model::T, RNG::R=Random.GLOBAL_RNG) where {M<:Real,N<:Real,T<:EconomicModel,R<:AbstractRNG}
+        new{M,N,T,R}(timestep, endtime, model, RNG)
     end
 end
 
-@inline function Transducers.__foldl__(rf, val, sg::ScenarioGenerator{N,T,R}) where {N,T,R}
+@inline function Transducers.__foldl__(rf, val, sg::ScenarioGenerator{M,N,T,R}) where {M,N,T,R}
     Δt = sg.timestep
     prior = __initial_value(sg)
     for t in 0:Δt:sg.endtime
@@ -116,7 +116,6 @@ Base.Broadcast.broadcastable(x::T) where {T<:Correlated} = Ref(x)
         if iszero(t)
             val = @next(rf, val, tuple(prior...))
         else
-            @show t
             variates = rand(sgc.RNG, sgc.copula, n) # CDF
             map!(prior, 1:n) do i
                 nextvalue(sgc.sg[i].model, prior[i], t, Δt, variates[i])
