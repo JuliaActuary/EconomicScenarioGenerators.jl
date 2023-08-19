@@ -5,7 +5,7 @@
 [![Build Status](https://github.com/JuliaActuary/EconomicScenarioGenerators.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/JuliaActuary/EconomicScenarioGenerators.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/JuliaActuary/EconomicScenarioGenerators.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaActuary/EconomicScenarioGenerators.jl)
 
-Help wanted!
+> **NOTE**: Yields.jl was recently upgraded to become FinanceModel.jl. EconomicScenarioGenerators.jl is not yet compatible with FinanceModels. You can still utilize the package, but you should use Yields.jl instead of FinanceModels.jl. Track progress of the migration in [pull #43](https://github.com/JuliaActuary/EconomicScenarioGenerators.jl/pull/43)
 
 **This package is in Technical Preview Stage: The API is stabilizing and tests are passing but it has not been used in practice for very long. Please report any issues, provide feedback, and request specific features using the Discussions or Issues in this repository.**
 
