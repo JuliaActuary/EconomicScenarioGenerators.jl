@@ -1,23 +1,25 @@
 name = "EconomicScenarioGenerators"
 uuid = "1d18cbdc-9ca7-45fd-a8b2-b9434f9145be"
 authors = ["Alec Loudenback <alecloudenback@gmail.com> and contributors"]
-version = "0.4.2"
+version = "0.5.0"
 
 [deps]
 Copulas = "ae264745-0b69-425e-9d9d-cf662c5eec93"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+FinanceCore = "b9b1ffdd-6612-4b69-8227-7663be06e089"
+FinanceModels = "77f2ae65-bdde-421f-ae9d-22f1af19dd76"
 ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
-IterTools = "c8e1da08-722c-5040-9ed9-7db0dc04731e"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
-Yields = "d7e99b2f-e7f3-4d9e-9f01-2338fc023ad3"
+Transducers = "28d57a85-8fef-5791-bfe6-a80928e7c999"
 
 [compat]
 Copulas = "0.1"
+FinanceCore = "2"
+FinanceModels = "4"
+Transducers = "0.4"
 Distributions = "0.25"
 ForwardDiff = "^0.10"
-IterTools = "^1.4"
-Yields = "^3"
-julia = "1.6"
+julia = "1.9"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

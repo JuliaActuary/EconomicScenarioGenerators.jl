@@ -1,15 +1,15 @@
 using EconomicScenarioGenerators
 using Test
-using ActuaryUtilities
-using Yields
+using FinanceCore
+using FinanceModels
 using Distributions
 using Copulas
 using HypothesisTests
 using StatsBase
 using StableRNGs
+using Transducers
 
 include("utils.jl")
 include("interest.jl")
 include("equity.jl")
-include("generator.jl")
 include("Correlated.jl")
