@@ -14,9 +14,12 @@ Transducers = "28d57a85-8fef-5791-bfe6-a80928e7c999"
 
 [compat]
 Copulas = "0.1"
+FinanceCore = "2"
+FinanceModels = "4"
+Transducers = "0.4"
 Distributions = "0.25"
 ForwardDiff = "^0.10"
-julia = "1.6"
+julia = "1.9"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
