@@ -77,7 +77,7 @@
             rates = [0.01, 0.01, 0.03, 0.05, 0.07, 0.16, 0.35, 0.92, 1.40, 1.74, 2.31, 2.41] ./ 100
             mats = [1 / 12, 2 / 12, 3 / 12, 6 / 12, 1, 2, 3, 5, 7, 10, 20, 30]
             c = FinanceModels.fit(
-                FinanceModels.Spline.Cubic(),
+                FinanceModels.Spline.Quadratic(),
                 FinanceModels.CMTYield.(rates, mats),
                 FinanceModels.Fit.Bootstrap()
             )
@@ -95,14 +95,14 @@
 
 
             s = EconomicScenarioGenerators.ScenarioGenerator(
-                0.5,                              # timestep
+                0.05,                              # timestep
                 30.0,                             # projection horizon
                 m,
                 StableRNG(1)
             )
 
             v = collect(s)
-            @test length(v) == 61
+            @test length(v) == 601
 
             @test YieldCurve(s) isa FinanceModels.Yield.AbstractYieldModel
 
