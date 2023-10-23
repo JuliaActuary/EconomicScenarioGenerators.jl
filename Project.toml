@@ -1,7 +1,7 @@
 name = "EconomicScenarioGenerators"
 uuid = "1d18cbdc-9ca7-45fd-a8b2-b9434f9145be"
 authors = ["Alec Loudenback <alecloudenback@gmail.com> and contributors"]
-version = "0.5.0"
+version = "0.5.1"
 
 [deps]
 Copulas = "ae264745-0b69-425e-9d9d-cf662c5eec93"
