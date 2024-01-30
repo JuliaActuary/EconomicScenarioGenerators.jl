@@ -1,6 +1,8 @@
 module FinanceModelsExt
 import FinanceModels
 import FinanceCore
+import ForwardDiff
+
 using EconomicScenarioGenerators
 const ESG = EconomicScenarioGenerators
 
@@ -20,7 +22,7 @@ function ESG.θ(M::ESG.HullWhite{T}, time, timestep) where {T<:Union{FinanceMode
 
 end
 
-function YieldCurve(sg::ESG.ScenarioGenerator{M,N,T,R}; model=FinanceModels.Spline.Linear()) where {M,N,T<:ESG.InterestRateModel,R}
+function ESG.YieldCurve(sg::ESG.ScenarioGenerator{M,N,T,R}; model=FinanceModels.Spline.Linear()) where {M,N,T<:ESG.InterestRateModel,R}
     times = sg.timestep:sg.timestep:(sg.endtime+sg.timestep)
     # compute the accumulated discount factor (ZCB price)
     zeros = cumsum(FinanceCore.rate.(sg .* sg.timestep)) ./ times
@@ -30,7 +32,7 @@ function YieldCurve(sg::ESG.ScenarioGenerator{M,N,T,R}; model=FinanceModels.Spli
 
 end
 
-function YieldCurve(c::C; model=FinanceModels.Spline.Linear()) where {C<:ESG.Correlated}
+function ESG.YieldCurve(c::C; model=FinanceModels.Spline.Linear()) where {C<:ESG.Correlated}
     fsg = first(c.sg)
     Δt = fsg.timestep
     times = Δt:Δt:(fsg.endtime+Δt)
