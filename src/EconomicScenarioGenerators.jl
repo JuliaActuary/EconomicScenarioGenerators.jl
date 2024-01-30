@@ -1,7 +1,6 @@
 module EconomicScenarioGenerators
 
 import ForwardDiff
-import FinanceModels
 import FinanceCore
 using Transducers
 using Transducers: @next, complete, __foldl__, asfoldable, next
@@ -129,10 +128,10 @@ end
 __initial_value(sg::ScenarioGenerator) = __initial_value(sg.model, sg.timestep)
 __initial_value(m, timestep) = m.initial
 
+YieldCurve() = error("Must have FinanceModels imported and call this function on a ScenarioGenerator.")
 
-include("Yields.jl")
 export Vasicek, CoxIngersollRoss, HullWhite,
     BlackScholesMerton, ConstantElasticityofVariance,
-    ScenarioGenerator, YieldCurve, Correlated
+    ScenarioGenerator, Correlated, YieldCurve
 
 end
