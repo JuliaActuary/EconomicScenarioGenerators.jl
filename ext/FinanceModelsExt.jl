@@ -1,11 +1,13 @@
 module FinanceModelsExt
 import FinanceModels
 import FinanceCore
+using EconomicScenarioGenerators
+const ESG = EconomicScenarioGenerators
 
 export YieldCurve
 
 # make this an extension w/ FinanceModels?
-function θ(M::HullWhite{T}, time, timestep) where {T<:Union{FinanceModels.Yield.AbstractYieldModel,FinanceCore.Rate}}
+function ESG.θ(M::ESG.HullWhite{T}, time, timestep) where {T<:Union{FinanceModels.Yield.AbstractYieldModel,FinanceCore.Rate}}
     # https://quantpie.co.uk/srm/hull_white_sr.php
     # https://quant.stackexchange.com/questions/8724/how-to-calibrate-hull-white-from-zero-curve
     # https://mdpi-res.com/d_attachment/mathematics/mathematics-08-01719/article_deploy/mathematics-08-01719-v2.pdf?version=1603181408
@@ -18,7 +20,7 @@ function θ(M::HullWhite{T}, time, timestep) where {T<:Union{FinanceModels.Yield
 
 end
 
-function YieldCurve(sg::ScenarioGenerator{M,N,T,R}; model=FinanceModels.Spline.Linear()) where {M,N,T<:InterestRateModel,R}
+function YieldCurve(sg::ESG.ScenarioGenerator{M,N,T,R}; model=FinanceModels.Spline.Linear()) where {M,N,T<:ESG.InterestRateModel,R}
     times = sg.timestep:sg.timestep:(sg.endtime+sg.timestep)
     # compute the accumulated discount factor (ZCB price)
     zeros = cumsum(FinanceCore.rate.(sg .* sg.timestep)) ./ times
@@ -28,7 +30,7 @@ function YieldCurve(sg::ScenarioGenerator{M,N,T,R}; model=FinanceModels.Spline.L
 
 end
 
-function YieldCurve(c::C; model=FinanceModels.Spline.Linear()) where {C<:Correlated}
+function YieldCurve(c::C; model=FinanceModels.Spline.Linear()) where {C<:ESG.Correlated}
     fsg = first(c.sg)
     Δt = fsg.timestep
     times = Δt:Δt:(fsg.endtime+Δt)
