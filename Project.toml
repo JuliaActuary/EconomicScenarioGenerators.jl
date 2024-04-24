@@ -20,7 +20,7 @@ FinanceModelsExt = "FinanceModels"
 [compat]
 Copulas = "0.1"
 FinanceCore = "2"
-FinanceModels = "4"
+FinanceModels = "4 - 4.7"
 Transducers = "0.4"
 Distributions = "0.25"
 ForwardDiff = "^0.10"
