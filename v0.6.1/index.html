@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Home · EconomicScenarioGenerators.jl</title><script data-outdated-warner src="assets/warner.js"></script><link rel="canonical" href="https://JuliaActuary.github.io/EconomicScenarioGenerators.jl/"/><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.044/juliamono.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href><img src="assets/logo.svg" alt="EconomicScenarioGenerators.jl logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href>EconomicScenarioGenerators.jl</a></span></div><form class="docs-search" action="search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li class="is-active"><a class="tocitem" href>Home</a><ul class="internal"><li><a class="tocitem" href="#Usage"><span>Usage</span></a></li><li><a class="tocitem" href="#Examples"><span>Examples</span></a></li><li><a class="tocitem" href="#Models"><span>Models</span></a></li><li><a class="tocitem" href="#Correlated-Scenarios"><span>Correlated Scenarios</span></a></li><li><a class="tocitem" href="#Other-ESG-packages"><span>Other ESG packages</span></a></li></ul></li><li><a class="tocitem" href="API/">API</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Home</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Home</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliaActuary/EconomicScenarioGenerators.jl/blob/master/docs/src/index.md#" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="EconomicScenarioGenerators.jl"><a class="docs-heading-anchor" href="#EconomicScenarioGenerators.jl">EconomicScenarioGenerators.jl</a><a id="EconomicScenarioGenerators.jl-1"></a><a class="docs-heading-anchor-permalink" href="#EconomicScenarioGenerators.jl" title="Permalink"></a></h1><p><a href="https://JuliaActuary.github.io/EconomicScenarioGenerators.jl/stable"><img src="https://img.shields.io/badge/docs-stable-blue.svg" alt="Stable"/></a> <a href="https://JuliaActuary.github.io/EconomicScenarioGenerators.jl/dev"><img src="https://img.shields.io/badge/docs-dev-blue.svg" alt="Dev"/></a> <a href="https://github.com/JuliaActuary/EconomicScenarioGenerators.jl/actions/workflows/CI.yml?query=branch%3Amain"><img src="https://github.com/JuliaActuary/EconomicScenarioGenerators.jl/actions/workflows/CI.yml/badge.svg?branch=main" alt="Build Status"/></a> <a href="https://codecov.io/gh/JuliaActuary/EconomicScenarioGenerators.jl"><img src="https://codecov.io/gh/JuliaActuary/EconomicScenarioGenerators.jl/branch/main/graph/badge.svg" alt="Coverage"/></a></p><p><strong>This package is in Technical Preview Stage: The API is stabilizing and tests are passing but it has not been used in practice for very long. Please report any issues, provide feedback, and request specific features using the Discussions or Issues in this repository.</strong></p><p>Interested in developing economic scenario generators in Julia? Consider contributing to this package. Open an issue, create a pull request, or discuss on the Julia Zulip&#39;s #actuary channel.</p><h2 id="Usage"><a class="docs-heading-anchor" href="#Usage">Usage</a><a id="Usage-1"></a><a class="docs-heading-anchor-permalink" href="#Usage" title="Permalink"></a></h2><p>EconoicScenarioGenerators.jl is now available via the General Registry. Install and use in the normal way:</p><ol><li>Add EconomicScenarioGenerators via Pkg</li><li><code>import EconomicScenarioGenerators</code> or <code>using EconomicScenarioGenerators</code> in your code</li></ol><h2 id="Examples"><a class="docs-heading-anchor" href="#Examples">Examples</a><a id="Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Examples" title="Permalink"></a></h2><h3 id="Importing-packages"><a class="docs-heading-anchor" href="#Importing-packages">Importing packages</a><a id="Importing-packages-1"></a><a class="docs-heading-anchor-permalink" href="#Importing-packages" title="Permalink"></a></h3><p>First, import both <code>EconomicScenarioGenerators</code> and <a href="https://github.com/JuliaActuary/FinanceModels.jl"><code>FinanceModels</code></a>:</p><pre><code class="nohighlight hljs">using EconomicScenarioGenerators
+using FinanceModels</code></pre><h2 id="Models"><a class="docs-heading-anchor" href="#Models">Models</a><a id="Models-1"></a><a class="docs-heading-anchor-permalink" href="#Models" title="Permalink"></a></h2><h3 id="Interest-Rate-Models"><a class="docs-heading-anchor" href="#Interest-Rate-Models">Interest Rate Models</a><a id="Interest-Rate-Models-1"></a><a class="docs-heading-anchor-permalink" href="#Interest-Rate-Models" title="Permalink"></a></h3><ul><li><code>Vasicek</code></li><li><code>CoxIngersolRoss</code></li><li><code>HullWhite</code></li></ul><h3 id="EquityModels"><a class="docs-heading-anchor" href="#EquityModels">EquityModels</a><a id="EquityModels-1"></a><a class="docs-heading-anchor-permalink" href="#EquityModels" title="Permalink"></a></h3><ul><li><code>BlackScholesMerton</code></li></ul><h3 id="Interest-Rate-Model-Examples"><a class="docs-heading-anchor" href="#Interest-Rate-Model-Examples">Interest Rate Model Examples</a><a id="Interest-Rate-Model-Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Interest-Rate-Model-Examples" title="Permalink"></a></h3><h4 id="Vasicek"><a class="docs-heading-anchor" href="#Vasicek">Vasicek</a><a id="Vasicek-1"></a><a class="docs-heading-anchor-permalink" href="#Vasicek" title="Permalink"></a></h4><pre><code class="language-julia hljs">m = Vasicek(0.136,0.0168,0.0119,Continuous(0.01)) # a, b, σ, initial Rate
+s = ScenarioGenerator(
+        1,  # timestep
+        30, # projection horizon
+        m,  # model
+    )</code></pre><p>You can collect a single generated scenario lik so:</p><pre><code class="language-julia hljs">rates = collect(s)</code></pre><p>And the package integrates with <a href="https://github.com/JuliaActuary/FinanceModels.jl">FinanceModels.jl</a>:</p><pre><code class="language-julia hljs">YieldCurve(s)
+</code></pre><p>will produce a yield curve object:</p><pre><code class="language-julia-repl hljs">              ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Yield Curve (FinanceModels.Yield.Spline)⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀           
+              ┌────────────────────────────────────────────────────────────┐           
+         0.04 │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ Zero rates
+              │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│           
+              │⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│           
+              │⠀⠀⠀⠀⠀⠀⡠⠎⠉⠉⠊⠉⠑⠦⠤⠤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⡠⠤⠤⠔│           
+              │⠀⠀⠀⠀⢀⠖⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠑⠦⢄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣀⠤⠔⠒⠊⠉⠉⠀⠀⠀⠀⠀⠀│           
+              │⠀⠀⠀⢰⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠓⠒⠦⠤⢄⣀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⠤⠔⠒⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│           
+              │⠀⠀⠀⡎⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠒⠒⠒⠒⠊⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│           
+   Continuous │⠀⠀⢰⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│           
+              │⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│           
+              │⠀⡸⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│           
+              │⢀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│           
+              │⡸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│           
+              │⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉│           
+              │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│           
+        -0.01 │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│           
+              └────────────────────────────────────────────────────────────┘           
+              ⠀0⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀time⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀30⠀        </code></pre><h4 id="CoxIngersolRoss"><a class="docs-heading-anchor" href="#CoxIngersolRoss">CoxIngersolRoss</a><a id="CoxIngersolRoss-1"></a><a class="docs-heading-anchor-permalink" href="#CoxIngersolRoss" title="Permalink"></a></h4><p>A CIR model:</p><pre><code class="language-julia hljs">m = CoxIngersollRoss(0.136,0.0168,0.0119,Continuous(0.01))</code></pre><h4 id="Hull-White-Model-using-a-Yields.jl-YieldCurve"><a class="docs-heading-anchor" href="#Hull-White-Model-using-a-Yields.jl-YieldCurve">Hull White Model using a Yields.jl YieldCurve</a><a id="Hull-White-Model-using-a-Yields.jl-YieldCurve-1"></a><a class="docs-heading-anchor-permalink" href="#Hull-White-Model-using-a-Yields.jl-YieldCurve" title="Permalink"></a></h4><p>Construct a yield curve and use that as the arbitrage-free forward curve within the Hull-White model.</p><pre><code class="language-julia hljs">using FinanceModels, EconomicScenarioGenerators
+rates =[0.01, 0.01, 0.03, 0.05, 0.07, 0.16, 0.35, 0.92, 1.40, 1.74, 2.31, 2.41] ./ 100
+mats = [1/12, 2/12, 3/12, 6/12, 1, 2, 3, 5, 7, 10, 20, 30]
+
+
+curve = FinanceModels.fit(
+    Spline.Cubic(),
+    CMTYield.(rates,mats),
+    Fit.Bootstrap()
+)
+
+
+m = HullWhite(.1,.002,curve) # a, σ, curve
+
+s = ScenarioGenerator(
+        1/12,  # timestep
+        30., # projection horizon
+        m,  # model
+    )</code></pre><p>Create 1000 yield curves from the scenario generator:</p><pre><code class="language-julia hljs">n = 1000
+curves = [YieldCurve(s) for i in 1:n]</code></pre><p>julia</p><p>Plot the result:</p><pre><code class="language-julia hljs">using Plots
+
+times = 1:30
+p=plot(title=&quot;EconomicScenarioGenerators.jl Hull White Model&quot;)
+
+# plot the zero rates
+for d in curves
+    plot!(p,times,rate.(zero.(d,times)),alpha=0.2,label=&quot;&quot;)
+end
+
+plot!(times,rate.(zero.(curve,times)),line=(:black, 5), label=&quot;Given Yield Curve&quot;)
+p
+    </code></pre><p><img src="https://user-images.githubusercontent.com/711879/182291819-66a0fa9e-7aab-4e52-b434-58494257d005.svg" alt="image"/></p><h3 id="Equity-Model-Examples"><a class="docs-heading-anchor" href="#Equity-Model-Examples">Equity Model Examples</a><a id="Equity-Model-Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Equity-Model-Examples" title="Permalink"></a></h3><h4 id="BlackScholesMerton"><a class="docs-heading-anchor" href="#BlackScholesMerton">BlackScholesMerton</a><a id="BlackScholesMerton-1"></a><a class="docs-heading-anchor-permalink" href="#BlackScholesMerton" title="Permalink"></a></h4><pre><code class="language-julia hljs">m = BlackScholesMerton(0.01,0.02,.15,100.)
+
+s = ScenarioGenerator(
+               1,  # timestep
+               30, # projection horizon
+               m,  # model
+           )</code></pre><p>Instantiate an array of the projection with <code>collect(s)</code>.</p><h5 id="Plotted-BSM-Example"><a class="docs-heading-anchor" href="#Plotted-BSM-Example">Plotted BSM Example</a><a id="Plotted-BSM-Example-1"></a><a class="docs-heading-anchor-permalink" href="#Plotted-BSM-Example" title="Permalink"></a></h5><p>Plot 100 paths:</p><pre><code class="nohighlight hljs">using Plots
+projections = [collect(s) for _ in 1:100]
+
+p = plot()
+
+for p in projections
+    plot!(0:30,p,label=&quot;&quot;,alpha=0.5)
+end
+
+p</code></pre><p><img src="https://user-images.githubusercontent.com/711879/180128072-fe08d285-0edc-4707-a89e-8d14fef23d2a.png" alt="BSM Paths"/></p><h2 id="Correlated-Scenarios"><a class="docs-heading-anchor" href="#Correlated-Scenarios">Correlated Scenarios</a><a id="Correlated-Scenarios-1"></a><a class="docs-heading-anchor-permalink" href="#Correlated-Scenarios" title="Permalink"></a></h2><p>Combined with <code>using Copulas</code>, you can create correlated scenarios with a given copula. See <code>?Correlated</code> for the docstring on creating a correlated set of scenario generators.</p><h3 id="Example"><a class="docs-heading-anchor" href="#Example">Example</a><a id="Example-1"></a><a class="docs-heading-anchor-permalink" href="#Example" title="Permalink"></a></h3><p>Create two equity paths that are 90% correlated:</p><pre><code class="nohighlight hljs">using EconomicScenarioGenerators, Copulas
+
+m = BlackScholesMerton(0.01,0.02,.15,100.)
+s = ScenarioGenerator(
+                      1,  # timestep
+                      30, # projection horizon
+                      m,  # model
+                  )
+
+ss = [s,s] # these don&#39;t have to be the exact same, but do need same shape
+g = ClaytonCopula(2,7) # highly dependendant model
+c = Correlated(ss,g)
+
+x = collect(c) # an array of tuples
+
+using Plots
+
+# get the 1st/2nd value from the scenario points
+plot(getindex.(x,1))
+plot!(getindex.(x,2))</code></pre><p><img src="https://user-images.githubusercontent.com/711879/183552235-9c44f0a7-932d-4e81-9ac1-9115628d3374.svg" alt="plot_20"/></p><h2 id="Other-ESG-packages"><a class="docs-heading-anchor" href="#Other-ESG-packages">Other ESG packages</a><a id="Other-ESG-packages-1"></a><a class="docs-heading-anchor-permalink" href="#Other-ESG-packages" title="Permalink"></a></h2><ul><li>Python<ul><li>https://github.com/jason-ash/pyesg</li></ul></li></ul></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="API/">API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.17 on <span class="colophon-date" title="Wednesday 24 April 2024 03:37">Wednesday 24 April 2024</span>. Using Julia version 1.10.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
