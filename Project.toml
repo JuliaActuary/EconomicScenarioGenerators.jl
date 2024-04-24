@@ -1,7 +1,7 @@
 name = "EconomicScenarioGenerators"
 uuid = "1d18cbdc-9ca7-45fd-a8b2-b9434f9145be"
 authors = ["Alec Loudenback <alecloudenback@gmail.com> and contributors"]
-version = "0.6.0"
+version = "0.6.1"
 
 [weakdeps]
 FinanceModels = "77f2ae65-bdde-421f-ae9d-22f1af19dd76"
