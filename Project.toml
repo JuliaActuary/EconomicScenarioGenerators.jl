@@ -3,9 +3,6 @@ uuid = "1d18cbdc-9ca7-45fd-a8b2-b9434f9145be"
 authors = ["Alec Loudenback <alecloudenback@gmail.com> and contributors"]
 version = "0.6.1"
 
-[weakdeps]
-FinanceModels = "77f2ae65-bdde-421f-ae9d-22f1af19dd76"
-
 [deps]
 Copulas = "ae264745-0b69-425e-9d9d-cf662c5eec93"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
@@ -14,16 +11,19 @@ ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 Transducers = "28d57a85-8fef-5791-bfe6-a80928e7c999"
 
+[weakdeps]
+FinanceModels = "77f2ae65-bdde-421f-ae9d-22f1af19dd76"
+
 [extensions]
 FinanceModelsExt = "FinanceModels"
 
 [compat]
 Copulas = "0.1"
-FinanceCore = "2"
-FinanceModels = "4 - 4.7"
-Transducers = "0.4"
 Distributions = "0.25"
+FinanceCore = "2"
+FinanceModels = "4 - 4.7, 4"
 ForwardDiff = "^0.10"
+Transducers = "0.4"
 julia = "1.9"
 
 [extras]
