@@ -175,3 +175,10 @@ function θ(M::HullWhite{T}, time, timestep) where {T<:Real}
     return δf + f_t * a + M.σ^2 / (2 * a) * (1 - exp(-2 * a * time))
 
 end
+
+function __fδ(model, time)
+    f(t) = log(FinanceCore.discount(model.curve, t[1]))
+    δf = -only(ForwardDiff.hessian(f, [time]))::Float64
+    f_t = -only(ForwardDiff.gradient(f, [time]))::Float64
+    return δf, f_t
+end

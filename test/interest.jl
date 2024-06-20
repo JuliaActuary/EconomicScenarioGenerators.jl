@@ -152,7 +152,33 @@
             end
 
         end
+        @testset "constant derivative" begin
+
+            import FinanceModels: AbstractYieldModel, discount
+
+            # a yield curve where the rate of change of the instantaneous forward is constant
+            struct ConstDeriv <: FinanceModels.Yield.AbstractYieldModel
+                d::Float64
+                initial::Float64
+            end
+
+            FinanceCore.discount(c::ConstDeriv, time) = exp(-(time^2 * c.d) / 2 - c.initial * time)
+
+
+            m = HullWhite(0.1, 0.001, ConstDeriv(0.01, 0.02))
+            a, b = EconomicScenarioGenerators.__fδ(m, 1)
+            @test a ≈ 0.01
+            @test b ≈ 0.02 + 0.01 * 1
+            a, b = EconomicScenarioGenerators.__fδ(m, 2)
+            @test a ≈ 0.01
+            @test b ≈ 0.02 + 0.01 * 2
+
+        end
     end
+
+
+
+
 
 
 
