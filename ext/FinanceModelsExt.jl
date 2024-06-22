@@ -14,7 +14,7 @@ function ESG.θ(M::ESG.HullWhite{T}, time, timestep) where {T<:Union{FinanceMode
     # https://quant.stackexchange.com/questions/8724/how-to-calibrate-hull-white-from-zero-curve
     # https://mdpi-res.com/d_attachment/mathematics/mathematics-08-01719/article_deploy/mathematics-08-01719-v2.pdf?version=1603181408
     a = M.a
-    δf, f_t = ESG.__fδ(M, time)
+    δf, f_t = ESG.__δf(M, time)
 
     return δf + f_t * a + M.σ^2 / (2 * a) * (1 - exp(-2 * a * time))
 

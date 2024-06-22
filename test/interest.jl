@@ -166,10 +166,10 @@
 
 
             m = HullWhite(0.1, 0.001, ConstDeriv(0.01, 0.02))
-            a, b = EconomicScenarioGenerators.__fδ(m, 1)
+            a, b = EconomicScenarioGenerators.__δf(m, 1)
             @test a ≈ 0.01
             @test b ≈ 0.02 + 0.01 * 1
-            a, b = EconomicScenarioGenerators.__fδ(m, 2)
+            a, b = EconomicScenarioGenerators.__δf(m, 2)
             @test a ≈ 0.01
             @test b ≈ 0.02 + 0.01 * 2
 

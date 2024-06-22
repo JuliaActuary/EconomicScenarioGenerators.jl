@@ -176,7 +176,7 @@ function θ(M::HullWhite{T}, time, timestep) where {T<:Real}
 
 end
 
-function __fδ(model, time)
+function __δf(model, time)
     f(t) = log(FinanceCore.discount(model.curve, t[1]))
     δf = -only(ForwardDiff.hessian(f, [time]))::Float64
     f_t = -only(ForwardDiff.gradient(f, [time]))::Float64
