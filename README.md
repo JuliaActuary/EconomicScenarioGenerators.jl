@@ -64,7 +64,7 @@ YieldCurve(s)
 
 ```
 
-will produce a yield curve object:
+will produce a yield curve object (if `UnicodePlots.jl` has also been imported):
 
 ```julia-repl
               ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Yield Curve (FinanceModels.Yield.Spline)⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀           
@@ -102,24 +102,22 @@ Construct a yield curve and use that as the arbitrage-free forward curve within 
 
 ```julia
 using FinanceModels, EconomicScenarioGenerators
-rates =[0.01, 0.01, 0.03, 0.05, 0.07, 0.16, 0.35, 0.92, 1.40, 1.74, 2.31, 2.41] ./ 100
-mats = [1/12, 2/12, 3/12, 6/12, 1, 2, 3, 5, 7, 10, 20, 30]
-
-
-curve = FinanceModels.fit(
-    Spline.Cubic(),
-    CMTYield.(rates,mats),
-    Fit.Bootstrap()
+rates = [0.01, 0.01, 0.03, 0.05, 0.07, 0.16, 0.35, 0.92, 1.40, 1.74, 2.31, 2.41] ./ 100
+mats = [1 / 12, 2 / 12, 3 / 12, 6 / 12, 1, 2, 3, 5, 7, 10, 20, 30]
+c = FinanceModels.fit(
+    FinanceModels.Spline.Cubic(),
+    FinanceModels.ZCBYield.(rates, mats),
+    FinanceModels.Fit.Bootstrap()
 )
 
+m = HullWhite(2.0, 0.025, c)
 
-m = HullWhite(.1,.002,curve) # a, σ, curve
+s = EconomicScenarioGenerators.ScenarioGenerator(
+    0.01,                              # timestep
+    30.0,                             # projection horizon
+    m
+)
 
-s = ScenarioGenerator(
-        1/12,  # timestep
-        30., # projection horizon
-        m,  # model
-    )
 ```
 
 Create 1000 yield curves from the scenario generator:
@@ -132,22 +130,21 @@ curves = [YieldCurve(s) for i in 1:n]
 Plot the result:
 
 ```julia
-using Plots
+using CairoMakie
 
 times = 1:30
-p=plot(title="EconomicScenarioGenerators.jl Hull White Model")
 
+fig = Figure()
+axis = Axis(fig[1,1],title="EconomicScenarioGenerators.jl Hull White Model",xlabel="time",ylabel="rate")
 # plot the zero rates
 for d in curves
-    plot!(p,times,rate.(zero.(d,times)),alpha=0.2,label="")
+    lines!(axis,times,rate.(zero.(d,times)),alpha=0.1,label="")
 end
-
-plot!(times,rate.(zero.(curve,times)),line=(:black, 5), label="Given Yield Curve")
-p
-    
+lines!(axis,times,rate.(zero.(c,times)),color=:black,linewidth=7)
+fig
 ```
 
-![image](https://user-images.githubusercontent.com/711879/182291819-66a0fa9e-7aab-4e52-b434-58494257d005.svg)
+![image](https://github.com/JuliaActuary/EconomicScenarioGenerators.jl/assets/711879/09ef7136-30bf-44cf-865c-987d0df92a4a)
 
 ### Equity Model Examples
 

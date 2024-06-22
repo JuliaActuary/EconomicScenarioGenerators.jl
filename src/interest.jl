@@ -155,6 +155,7 @@ end
 # See FinanceModels.jl for HullWhite with a YieldCurve defining theta
 
 __initial_value(m::HullWhite, timestep) = FinanceCore.forward(m.curve, 0.0, timestep)
+__initial_value(m::HullWhite{T}, timestep) where {T<:Real} = m.curve
 
 # how would HullWhite be constructed if not giving it a curve?
 function nextvalue(M::HullWhite{T}, prior, time, timestep, variate) where {T}
@@ -170,8 +171,16 @@ function θ(M::HullWhite{T}, time, timestep) where {T<:Real}
     # https://quant.stackexchange.com/questions/8724/how-to-calibrate-hull-white-from-zero-curve
     a = M.a
     δf = 0
-    f_t = M.θ
+    f_t = M.curve
 
     return δf + f_t * a + M.σ^2 / (2 * a) * (1 - exp(-2 * a * time))
 
+end
+
+function __δf(model, time)
+    f(t) = log(FinanceCore.discount(model.curve, t[1]))
+    δf = -only(ForwardDiff.hessian(f, [time]))::Float64
+    f_t = -only(ForwardDiff.gradient(f, [time]))::Float64
+    # @show time, f(time) / time, f_t, δf, f(time) / time + f_t
+    return δf, f_t
 end

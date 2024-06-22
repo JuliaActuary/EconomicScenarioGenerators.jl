@@ -1,7 +1,6 @@
 [deps]
 Copulas = "ae264745-0b69-425e-9d9d-cf662c5eec93"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
-EconomicScenarioGenerators = "1d18cbdc-9ca7-45fd-a8b2-b9434f9145be"
 FinanceCore = "b9b1ffdd-6612-4b69-8227-7663be06e089"
 FinanceModels = "77f2ae65-bdde-421f-ae9d-22f1af19dd76"
 HypothesisTests = "09f84164-cd44-5f33-b23f-e6b0d136a0d5"
