@@ -35,7 +35,7 @@
                 Fit.Bootstrap()
             )
 
-            m = HullWhite(0.1, 0.01, c)
+            m = HullWhite(2.0, 0.01, c)
 
             s = ScenarioGenerator(
                 0.1,                              # timestep
@@ -142,7 +142,7 @@
                 CMTYield.(rates, mats),
                 Fit.Bootstrap())
 
-            m = HullWhite(0.1, 0.01, c)
+            m = HullWhite(2.0, 0.01, c)
 
             s = ScenarioGenerator(
                 0.1,                              # timestep
