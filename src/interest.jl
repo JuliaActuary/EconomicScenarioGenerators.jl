@@ -143,9 +143,9 @@ end
 """
     HullWhite(a,σ,curve::Yields.AbstractYield)
 
-An interest model that should be market consistent with the given `curve`.
+An one-factor interest model that should be market consistent with the given `curve`.
 
-Via Wikipedia: https://en.wikipedia.org/wiki/Hull%E2%80%93White_model
+Via [Wikipedia](https://en.wikipedia.org/wiki/Hull–White_model#One-factor_model)
 """
 struct HullWhite{T} <: ShortRateModel
     a::Float64 # 0.136
