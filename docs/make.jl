@@ -10,7 +10,7 @@ makedocs(;
     sitename="EconomicScenarioGenerators.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://JuliaActuary.github.io/EconomicScenarioGenerators.jl",
+        canonical="https://docs.juliaactuary.org/EconomicScenarioGenerators",
         assets=String[],
     ),
     pages=[
