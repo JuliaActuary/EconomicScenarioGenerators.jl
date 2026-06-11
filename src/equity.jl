@@ -12,20 +12,20 @@ An equity price model where `initial` is the initial value of the security.
 # Example
 
 ```julia-repl
+julia> using EconomicScenarioGenerators, Random
+
 julia> m = BlackScholesMerton(0.01,0.02,.15,100.)
 BlackScholesMerton{Float64, Float64, Float64}(0.01, 0.02, 0.15, 100.0)
 
-julia> s = ScenarioGenerator(1/252,1.,m,Random.Xoshiro(123))
-ScenarioGenerator{Float64, BlackScholesMerton{Float64, Float64, Float64}, Xoshiro}(0.003968253968253968, 1.0, BlackScholesMerton{Float64, Float64, Float64}(0.01, 0.02, 0.15, 100.0), Xoshiro(0xfefa8d41b8f5dca5, 0xf80cc98e147960c1, 0x20e2ccc17662fc1d, 0xea7a7dcb2e787c01))
+julia> s = ScenarioGenerator(1/252, 1.0, m, Xoshiro(123));
 
-julia> collect(s)
-253-element Vector{Float64}:
- 100.0
-  99.38331866043562
-  98.01039338118557
-   ⋮
-  88.57032295705861
-  88.40149667285587
+julia> prices = collect(s);
+
+julia> length(prices)
+253
+
+julia> first(prices), last(prices)
+(100.0, 85.41947139805312)
 ```
 
 """
