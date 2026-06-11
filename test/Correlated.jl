@@ -41,14 +41,14 @@
                 0.1,                              # timestep
                 30.0,                             # projection horizon
                 m,
-                # StableRNG(1)
+                StableRNG(1)
             )
 
             g = GaussianCopula([1.0 0.9; 0.9 1.0])
             c = Correlated(
                 [s, s],
                 g,
-                #StableRNG(1)
+                StableRNG(2)
             )
 
             x = collect(c)

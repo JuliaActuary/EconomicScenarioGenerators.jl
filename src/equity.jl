@@ -50,15 +50,6 @@ function nextvalue(M::BlackScholesMerton, prior, time, timestep, variate)
 end
 
 
-"""
-    ConstantElasticityofVariance(r,q,σ,β,initial)
-
-Where `initial` is the initial value of the security.
-"""
-struct ConstantElasticityofVariance{T,U,V,W} <: EquityModel
-    r::T # risk free rate
-    q::U # dividend yield
-    σ::V # roughly equivalent to the volatility in the usual lognormal model multiplied by F^{1-β}_{0}
-    β::W # elasticity of variance
-    initial::Float64
-end
+# n.b. a ConstantElasticityofVariance model was previously exported here, but it
+# had no `nextvalue` method — any ScenarioGenerator built on it failed at the
+# first step — so it has been removed rather than ship non-functional API.
