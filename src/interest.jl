@@ -164,7 +164,9 @@ end
 
 function θ(M::HullWhite{T}, time, timestep) where {T<:FinanceCore.Rate}
     a = M.a
-    f_t = M.curve.continuous_value # the flat instantaneous forward
+    # the flat instantaneous forward: convert via the public API rather than
+    # reading FinanceCore's internal field (which differs across 2.x releases)
+    f_t = FinanceCore.rate(convert(FinanceCore.Continuous(), M.curve))
     return f_t * a + M.σ^2 / (2 * a) * (1 - exp(-2 * a * time))
 end
 
