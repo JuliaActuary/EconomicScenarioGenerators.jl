@@ -1,3 +1,18 @@
+"""
+    EconomicScenarioGenerators
+
+Economic scenario generation: short-rate models (`Vasicek`, `CoxIngersollRoss`,
+`HullWhite`), an equity model (`BlackScholesMerton`), and copula-correlated
+multi-model simulation (`Correlated`).
+
+!!! note "Maintenance mode"
+    For single-model interest-rate scenario generation, prefer
+    `FinanceModels.ShortRate.{Vasicek, CoxIngersollRoss, HullWhite}` together
+    with `FinanceModels.simulate`/`pv_mc` (FinanceModels ≥ 6), which are the
+    maintained successors of this package's generators. This package remains
+    the home of `Correlated` — copula-correlated simulation across multiple
+    models — which FinanceModels does not provide.
+"""
 module EconomicScenarioGenerators
 
 import ForwardDiff
@@ -19,13 +34,15 @@ abstract type AbstractScenarioGenerator end
 """
     ScenarioGenerator(timestep::M,endtime::N,model,RNG::AbstractRNG) where {M<:Real, N<:Real}
 
-A `ScenarioGenerator` is an iterator which yields the time series of the model. It takes the parameters of the scenario generation such as `timestep` and `endtime` (the time horizon). `model` is any EconomicModel from the `EconomicScenarioGenerators` package.
+A `ScenarioGenerator` yields the time series of the model at gridpoints `0:timestep:endtime`. It takes the parameters of the scenario generation such as `timestep` and `endtime` (the time horizon). `model` is any EconomicModel from the `EconomicScenarioGenerators` package.
 
-A `ScenarioGenerator` can be `iterate`d or `collect`ed. 
+A `ScenarioGenerator` is a [Transducers.jl-foldable](https://juliafolds2.github.io/Transducers.jl/stable/howto/reducibles/) collection: it can be `collect`ed or used with transducer pipelines (`sg |> Map(f) |> collect`). It does not implement Julia's `iterate` protocol, so `for x in sg` is not supported.
 
 # Examples
 
 ```julia
+using EconomicScenarioGenerators, FinanceModels
+
 m = Vasicek(0.136,0.0168,0.0119,Continuous(0.01)) # a, b, σ, initial Rate
 s = ScenarioGenerator(
         1,  # timestep
@@ -66,11 +83,11 @@ Base.collect(s::AbstractScenarioGenerator) = s |> Map(identity) |> collect
 """
     Correlated(v::Vector{ScenarioGenerator},copula,RNG::AbstractRNG)
 
-An iterator which uses the given copula to correlate the outcomes of the underling ScenarioGenerators. The copula returns the sampled CDF which the individual models will interpret according to their own logic (e.g. the random variate for the BlackScholesMerton model assumes a normal variate within the diffusion process).
+Uses the given copula to correlate the outcomes of the underlying ScenarioGenerators. The copula returns the sampled CDF which the individual models will interpret according to their own logic (e.g. the random variate for the BlackScholesMerton model assumes a normal variate within the diffusion process).
 
 The `time` and `timestep` of the underlying ScenarioGenerators are asserted to be the same upon construction.
 
-A `Correlated` can be `iterate`d or `collect`ed. It will iterate through each sub-scenario generator and yield the time series of each (as opposed to iterating through each timestep for all models at each step).
+Like `ScenarioGenerator`, a `Correlated` is a Transducers.jl-foldable collection (`collect`able; no `iterate` protocol). Each element is an `NTuple` holding all models' values at one timestep — `collect(c)` returns a vector over timesteps of n-tuples, **not** one time series per model.
 
 # Examples
 
@@ -115,7 +132,10 @@ Base.Broadcast.broadcastable(x::T) where {T<:Correlated} = Ref(x)
         if iszero(t)
             val = @next(rf, val, tuple(prior...))
         else
-            variates = rand(sgc.RNG, sgc.copula, n) # CDF
+            # one joint sample (length-n vector of uniforms) per timestep; the
+            # previous `rand(RNG, copula, n)` drew n full samples (an n×n
+            # matrix) and used only the first column
+            variates = rand(sgc.RNG, sgc.copula) # CDF
             map!(prior, 1:n) do i
                 nextvalue(sgc.sg[i].model, prior[i], t, Δt, variates[i])
             end
@@ -131,7 +151,7 @@ __initial_value(m, timestep) = m.initial
 YieldCurve() = error("Must have FinanceModels imported and call this function on a ScenarioGenerator.")
 
 export Vasicek, CoxIngersollRoss, HullWhite,
-    BlackScholesMerton, ConstantElasticityofVariance,
+    BlackScholesMerton,
     ScenarioGenerator, Correlated, YieldCurve
 
 end

@@ -1,3 +1,4 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 EconomicScenarioGenerators = "1d18cbdc-9ca7-45fd-a8b2-b9434f9145be"
+FinanceCore = "b9b1ffdd-6612-4b69-8227-7663be06e089"

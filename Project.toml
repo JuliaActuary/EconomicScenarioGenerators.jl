@@ -1,7 +1,7 @@
 name = "EconomicScenarioGenerators"
 uuid = "1d18cbdc-9ca7-45fd-a8b2-b9434f9145be"
-authors = ["Alec Loudenback <alecloudenback@gmail.com> and contributors"]
 version = "0.7.0"
+authors = ["Alec Loudenback <alecloudenback@gmail.com> and contributors"]
 
 [deps]
 Copulas = "ae264745-0b69-425e-9d9d-cf662c5eec93"
@@ -20,9 +20,11 @@ FinanceModelsExt = "FinanceModels"
 [compat]
 Copulas = "0.1"
 Distributions = "0.25"
-FinanceCore = "2"
-FinanceModels = "4.9"
-ForwardDiff = "^0.10"
+FinanceCore = "2, 3"
+FinanceModels = "6"
+ForwardDiff = "0.10, 1"
+Random = "1"
+Test = "1"
 Transducers = "0.4"
 julia = "1.10"
 

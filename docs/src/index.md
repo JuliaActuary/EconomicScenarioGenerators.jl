@@ -8,13 +8,14 @@ CurrentModule = EconomicScenarioGenerators
 [![Build Status](https://github.com/JuliaActuary/EconomicScenarioGenerators.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/JuliaActuary/EconomicScenarioGenerators.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/JuliaActuary/EconomicScenarioGenerators.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaActuary/EconomicScenarioGenerators.jl)
 
-**This package is in Technical Preview Stage: The API is stabilizing and tests are passing but it has not been used in practice for very long. Please report any issues, provide feedback, and request specific features using the Discussions or Issues in this repository.**
+!!! note "Maintenance mode"
+    For single-model interest-rate scenario generation, prefer `FinanceModels.ShortRate.{Vasicek, CoxIngersollRoss, HullWhite}` together with `FinanceModels.simulate`/`pv_mc` (FinanceModels ≥ 6), which are the maintained successors of this package's generators. EconomicScenarioGenerators.jl remains the home of `Correlated` — copula-correlated simulation across multiple models — which FinanceModels does not provide. Bug fixes continue; new features land in FinanceModels.
 
-Interested in developing economic scenario generators in Julia? Consider contributing to this package. Open an issue, create a pull request, or discuss on the Julia Zulip's #actuary channel.
+Interested in developing economic scenario generators in Julia? Consider contributing to FinanceModels.jl. Open an issue, create a pull request, or discuss on the Julia Zulip's #actuary channel.
 
 ## Usage
 
-EconoicScenarioGenerators.jl is now available via the General Registry. Install and use in the normal way:
+EconomicScenarioGenerators.jl is available via the General Registry. Install and use in the normal way:
 1. Add EconomicScenarioGenerators via Pkg
 2. `import EconomicScenarioGenerators` or `using EconomicScenarioGenerators` in your code
 
@@ -34,7 +35,7 @@ using FinanceModels
 ### Interest Rate Models
 
 - `Vasicek`
-- `CoxIngersolRoss`
+- `CoxIngersollRoss`
 - `HullWhite`
 
 ### EquityModels
@@ -54,7 +55,7 @@ s = ScenarioGenerator(
     )
 ```
 
-You can collect a single generated scenario lik so:
+You can collect a single generated scenario like so:
 
 ```julia
 rates = collect(s)
@@ -91,7 +92,7 @@ will produce a yield curve object:
               ⠀0⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀time⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀30⠀        
 ```
 
-#### CoxIngersolRoss
+#### CoxIngersollRoss
 
 A CIR model:
 
@@ -99,7 +100,7 @@ A CIR model:
 m = CoxIngersollRoss(0.136,0.0168,0.0119,Continuous(0.01))
 ```
 
-#### Hull White Model using a Yields.jl YieldCurve
+#### Hull White Model using a FinanceModels.jl yield curve
 
 Construct a yield curve and use that as the arbitrage-free forward curve within the Hull-White model.
 
@@ -130,7 +131,7 @@ Create 1000 yield curves from the scenario generator:
 ```julia
 n = 1000
 curves = [YieldCurve(s) for i in 1:n]
-```julia
+```
 
 Plot the result:
 
@@ -207,7 +208,7 @@ s = ScenarioGenerator(
                   )
 
 ss = [s,s] # these don't have to be the exact same, but do need same shape
-g = ClaytonCopula(2,7) # highly dependendant model
+g = ClaytonCopula(2,7) # highly dependent model
 c = Correlated(ss,g)
 
 x = collect(c) # an array of tuples
