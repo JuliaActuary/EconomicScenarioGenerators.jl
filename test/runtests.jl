@@ -13,3 +13,8 @@ include("utils.jl")
 include("interest.jl")
 include("equity.jl")
 include("Correlated.jl")
+
+using Aqua
+@testset "Aqua.jl" begin
+    Aqua.test_all(EconomicScenarioGenerators)
+end

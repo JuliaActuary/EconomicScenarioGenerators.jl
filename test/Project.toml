@@ -1,4 +1,5 @@
 [deps]
+Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
 Copulas = "ae264745-0b69-425e-9d9d-cf662c5eec93"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 FinanceCore = "b9b1ffdd-6612-4b69-8227-7663be06e089"
