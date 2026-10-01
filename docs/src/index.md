@@ -8,8 +8,8 @@ CurrentModule = EconomicScenarioGenerators
 [![Build Status](https://github.com/JuliaActuary/EconomicScenarioGenerators.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/JuliaActuary/EconomicScenarioGenerators.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/JuliaActuary/EconomicScenarioGenerators.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaActuary/EconomicScenarioGenerators.jl)
 
-!!! note "Maintenance mode"
-    For single-model interest-rate scenario generation, prefer `FinanceModels.ShortRate.{Vasicek, CoxIngersollRoss, HullWhite}` together with `FinanceModels.simulate`/`pv_mc` (FinanceModels ≥ 6), which are the maintained successors of this package's generators. EconomicScenarioGenerators.jl remains the home of `Correlated` — copula-correlated simulation across multiple models — which FinanceModels does not provide. Bug fixes continue; new features land in FinanceModels.
+!!! note "Frozen: 0.7.1 is the final planned release"
+    For interest-rate scenarios, use `FinanceModels.ShortRate.{Vasicek, CoxIngersollRoss, HullWhite}` with `FinanceModels.simulate`/`pv_mc` (FinanceModels ≥ 6), the maintained successors of this package's generators. `Correlated` (copula-correlated simulation across multiple models) and equity paths are planned for FinanceModels 7.1; this repository will then be archived. 0.7.1 supports FinanceModels 6 and 7.
 
 Interested in developing economic scenario generators in Julia? Consider contributing to FinanceModels.jl. Open an issue, create a pull request, or discuss on the Julia Zulip's #actuary channel.
 
@@ -102,7 +102,7 @@ m = CoxIngersollRoss(0.136,0.0168,0.0119,Continuous(0.01))
 
 #### Hull White Model using a FinanceModels.jl yield curve
 
-Construct a yield curve and use that as the arbitrage-free forward curve within the Hull-White model.
+Construct a yield curve and use that as the arbitrage-free forward curve within the Hull-White model. The drift θ follows the curve's instantaneous forward and its slope, so use a smooth curve, such as a cubic spline fit to all quotes at once: a linear curve's forward jumps at every knot.
 
 ```julia
 using FinanceModels, EconomicScenarioGenerators
@@ -112,8 +112,7 @@ mats = [1/12, 2/12, 3/12, 6/12, 1, 2, 3, 5, 7, 10, 20, 30]
 
 curve = FinanceModels.fit(
     Spline.Cubic(),
-    CMTYield.(rates,mats),
-    Fit.Bootstrap()
+    CMTYield.(rates,mats)
 )
 
 

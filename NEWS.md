@@ -1,5 +1,26 @@
 # EconomicScenarioGenerators.jl Release Notes
 
+## v0.7.1
+
+- **Final planned release.** `Correlated` and equity paths are planned for
+  FinanceModels 7.1, after which this repository will be archived; FinanceModels'
+  short-rate models with `simulate`/`pv_mc` already succeed its interest-rate generators.
+- **FinanceModels 7 support:** compat is now `FinanceModels = "6, 7"`.
+- With FinanceModels 7, a curve from `YieldCurve` holds its zero rate flat from
+  `t = 0` to the first gridpoint (`timestep`), at the path's initial rate, and
+  beyond the last gridpoint (`endtime + timestep`) holds the forward at the
+  path's final rate. With 6.x both ends continued the first and last linear pieces
+  (the zero rate at `t = 0` was `2r₀ - z(2Δt)` rather than `r₀`). Values at the
+  gridpoints do not change.
+- With FinanceModels 7, a spline curve's zero rate is flat before its first
+  knot, so a `HullWhite` model on such a curve has a constant forward, and θ
+  without a forward-slope term, before that knot.
+- FinanceModels 7 bootstraps only linear interpolation:
+  `fit(Spline.Cubic(), quotes, Fit.Bootstrap())` throws. For `HullWhite`, fit a
+  smooth curve to all quotes at once, `fit(Spline.Cubic(), quotes)`, as the
+  README and documentation examples now do: a linear curve's forward jumps at
+  every knot, and θ with it.
+
 ## v0.7.0
 
 This release corrects several simulation-accuracy defects. **Generated scenarios
