@@ -6,7 +6,7 @@
 [![Coverage](https://codecov.io/gh/JuliaActuary/EconomicScenarioGenerators.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaActuary/EconomicScenarioGenerators.jl)
 
 > [!NOTE]
-> **Maintenance mode.** For single-model interest-rate scenario generation, prefer `FinanceModels.ShortRate.{Vasicek, CoxIngersollRoss, HullWhite}` together with `FinanceModels.simulate`/`pv_mc` (FinanceModels ≥ 6), which are the maintained successors of this package's generators. EconomicScenarioGenerators.jl remains the home of [`Correlated`](#correlated-scenarios) — copula-correlated simulation across multiple models — which FinanceModels does not provide. Bug fixes continue; new features land in FinanceModels.
+> **Frozen: 0.7.1 is the final planned release.** For interest-rate scenarios, use `FinanceModels.ShortRate.{Vasicek, CoxIngersollRoss, HullWhite}` with `FinanceModels.simulate`/`pv_mc` (FinanceModels ≥ 6), the maintained successors of this package's generators. [`Correlated`](#correlated-scenarios) (copula-correlated simulation across multiple models) and equity paths are planned for FinanceModels 7.1; this repository will then be archived. 0.7.1 supports FinanceModels 6 and 7.
 
 Interested in developing economic scenario generators in Julia? Consider contributing to FinanceModels.jl. Open an issue, create a pull request, or discuss on the Julia Zulip's #actuary channel.
 

@@ -2,6 +2,9 @@
 
 ## v0.7.1
 
+- **Final planned release.** `Correlated` and equity paths are planned for
+  FinanceModels 7.1, after which this repository will be archived; FinanceModels'
+  short-rate models with `simulate`/`pv_mc` already succeed its interest-rate generators.
 - **FinanceModels 7 support:** compat is now `FinanceModels = "6, 7"`.
 - With FinanceModels 7, a curve from `YieldCurve` holds its zero rate flat from
   `t = 0` to the first gridpoint (`timestep`), at the path's initial rate, and
