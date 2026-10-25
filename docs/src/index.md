@@ -3,8 +3,8 @@ CurrentModule = EconomicScenarioGenerators
 ```
 # EconomicScenarioGenerators.jl
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaActuary.github.io/EconomicScenarioGenerators.jl/stable)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaActuary.github.io/EconomicScenarioGenerators.jl/dev)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://docs.juliaactuary.org/EconomicScenarioGenerators/stable/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://docs.juliaactuary.org/EconomicScenarioGenerators/dev/)
 [![Build Status](https://github.com/JuliaActuary/EconomicScenarioGenerators.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/JuliaActuary/EconomicScenarioGenerators.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/JuliaActuary/EconomicScenarioGenerators.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaActuary/EconomicScenarioGenerators.jl)
 
